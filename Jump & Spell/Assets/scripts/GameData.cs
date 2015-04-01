@@ -1,21 +1,21 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
-public class GameControl : MonoBehaviour 
+public class GameData : MonoBehaviour
 {
-	public static GameControl control;
+	public static GameData dataHolder;
 
 	public int score;
 	// Singleton design - one persistent GameControl instance
 	void Awake()
 	{
-		if(control == null)
+		if (dataHolder == null)
 		{
 			// If it doesn't exist, create a new one
 			DontDestroyOnLoad(gameObject);
-			control = this;
+			dataHolder = this;
 		}
-		else if(control != this)
+		else if (dataHolder != this)
 		{
 			// If it exists and is another instance, delete this one because we only want one
 			Destroy(gameObject);

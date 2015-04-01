@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
 	public float maxSpeed = 5F;
 
-	public float jumpForce = 600F;
+	public float jumpForce = 700F;
 
 	bool grounded = false;
 	public Transform groundCheck; // makes detecting the ground simpler

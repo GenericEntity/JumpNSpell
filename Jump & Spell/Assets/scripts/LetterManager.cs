@@ -13,14 +13,8 @@ public class LetterManager : MonoBehaviour
 	List<char> letters;
 	string goal;
 
-	public Text statusDisplay;
-	public Text progressDisplay;
 	public LetterSpawner spawner;
 	public int respawnDuration = 3;
-
-	public int letterScore = 10;
-	public int wordScorePerLetter = 20;
-	public int wrongLetterScore = -50;
 
 	void Awake()
 	{
@@ -39,7 +33,7 @@ public class LetterManager : MonoBehaviour
 		foreach (char ch in letters)
 			word += ch;
 		word = word.ToUpper();
-		progressDisplay.text = word;
+		GameController.controller.SetProgressText(word);
 
 		bool isRightLetter = CheckWord(word);
 		/*
@@ -48,24 +42,26 @@ public class LetterManager : MonoBehaviour
 		if (isRightLetter && word.Equals(goal))
 		{
 			Debug.Log(string.Format("Word complete: {0}", goal));
-			progressDisplay.color = Color.green;
-			progressDisplay.text = "Word Complete!";
-			GameControl.control.score += letterScore + goal.Length * wordScorePerLetter;
+			GameController.controller.SetProgressColor(Color.green);
+			GameController.controller.SetProgressText("Word Complete!");
+			GameController.controller.UpdateScore(GameController.ScoreEvent.CompletedWord, goal.Length);
 			StartCoroutine("CycleWord");
 		}
 		else if (!isRightLetter)
 		{
 			Debug.Log(string.Format("Incorrect letter picked up: {0}", word[word.Length - 1]));
-			progressDisplay.color = Color.red;
-			progressDisplay.text = string.Format("Incorrect letter: {0}", word[word.Length - 1]);
-			GameControl.control.score += wrongLetterScore;
+			GameController.controller.SetProgressColor(Color.red);
+			GameController.controller.SetProgressText(string.Format("Incorrect letter: {0}", word[word.Length - 1]));
+			GameController.controller.UpdateScore(GameController.ScoreEvent.WrongLetter);
 			StartCoroutine("CycleWord");
 		}
 		else
 		{
 			Debug.Log(string.Format("Correct letter picked up: {0}", word[word.Length - 1]));
-			GameControl.control.score += letterScore;
+			GameController.controller.UpdateScore(GameController.ScoreEvent.CorrectLetter);
 		}
+
+		GameController.controller.SetScoreText(string.Format("Score: {0}", GameData.dataHolder.score));
 	}
 
 	/// <summary>
@@ -92,7 +88,6 @@ public class LetterManager : MonoBehaviour
 		return true;
 	}
 
-
 	IEnumerator CycleWord()
 	{
 		// Delete all letters in the list
@@ -102,12 +97,12 @@ public class LetterManager : MonoBehaviour
 		// Wait a certain amount of time before creating the new word
 		for (int i = respawnDuration; i > 0; --i)
 		{
-			statusDisplay.text = "New word in " + i;
+			GameController.controller.SetStatusText("New word in " + i);
 			yield return new WaitForSeconds(1);
 		}
 
-		progressDisplay.text = string.Empty;
-		progressDisplay.color = Color.black;
+		GameController.controller.SetProgressText(string.Empty);
+		GameController.controller.SetProgressColor(Color.black);
 		GetNextWordGoal();
 	}
 
@@ -119,7 +114,7 @@ public class LetterManager : MonoBehaviour
 
 		// Set that word as the goal
 		goal = chosen.ToUpper();
-		statusDisplay.text = string.Format("Goal: {0}", goal);
+		GameController.controller.SetStatusText(string.Format("Goal: {0}", goal));
 		Debug.Log(string.Format("Goal is {0}", goal));
 
 		// Spawn letters

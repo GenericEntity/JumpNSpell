@@ -47,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\scripts\CameraController.cs" />
-     <Compile Include="Assets\scripts\GameControl.cs" />
+     <Compile Include="Assets\scripts\GameController.cs" />
+     <Compile Include="Assets\scripts\GameData.cs" />
+     <Compile Include="Assets\scripts\GameTimer.cs" />
      <Compile Include="Assets\scripts\LetterManager.cs" />
      <Compile Include="Assets\scripts\LetterSpawner.cs" />
      <Compile Include="Assets\scripts\PickUpLetter.cs" />
