@@ -18,9 +18,17 @@ public class LetterManager : MonoBehaviour
 	public LetterSpawner spawner;
 	public int respawnDuration = 3;
 
-	void Start()
+	public int letterScore = 10;
+	public int wordScorePerLetter = 20;
+	public int wrongLetterScore = -50;
+
+	void Awake()
 	{
 		letters = new List<char>();
+	}
+
+	void Start()
+	{
 		GetNextWordGoal();
 	}
 
@@ -42,6 +50,7 @@ public class LetterManager : MonoBehaviour
 			Debug.Log(string.Format("Word complete: {0}", goal));
 			progressDisplay.color = Color.green;
 			progressDisplay.text = "Word Complete!";
+			GameControl.control.score += letterScore + goal.Length * wordScorePerLetter;
 			StartCoroutine("CycleWord");
 		}
 		else if (!isRightLetter)
@@ -49,7 +58,13 @@ public class LetterManager : MonoBehaviour
 			Debug.Log(string.Format("Incorrect letter picked up: {0}", word[word.Length - 1]));
 			progressDisplay.color = Color.red;
 			progressDisplay.text = string.Format("Incorrect letter: {0}", word[word.Length - 1]);
+			GameControl.control.score += wrongLetterScore;
 			StartCoroutine("CycleWord");
+		}
+		else
+		{
+			Debug.Log(string.Format("Correct letter picked up: {0}", word[word.Length - 1]));
+			GameControl.control.score += letterScore;
 		}
 	}
 
@@ -110,4 +125,6 @@ public class LetterManager : MonoBehaviour
 		// Spawn letters
 		spawner.SpawnNewLetters(goal);
 	}
+
+
 }
