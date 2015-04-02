@@ -9,6 +9,7 @@ public class GameTimer : MonoBehaviour
 	public long maxSeconds = 180;
 	public long startingSeconds = 90;
 	long secondsRemaining;
+	bool gameOver = false;
 
 	public Slider timeLeftSlider;
 	public Text timeLeftNumberDisplay;
@@ -66,6 +67,9 @@ public class GameTimer : MonoBehaviour
 	/// <param name="seconds">The number of seconds to add</param>
 	public void IncreaseTimeRemaining(int seconds)
 	{
+		if (gameOver)
+			return;
+
 		// Update value
 		secondsRemaining += seconds;
 
@@ -92,6 +96,7 @@ public class GameTimer : MonoBehaviour
 
 	void KillPlayer()
 	{
+		gameOver = true;
 		timeLeftNumberDisplay.color = Color.red;
 		CancelInvoke("TickDown");
 		controller.KillPlayer();
