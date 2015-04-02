@@ -12,31 +12,62 @@ public class GameController : MonoBehaviour
 		CompletedWord
 	}
 
-	public static GameController controller;
-
 	public Text statusDisplay;
 	public Text progressDisplay;
 	public Text scoreDisplay;
+	public GameTimer timer;
 
 	public int letterScore = 10;
 	public int wordScorePerLetter = 20;
 	public int wrongLetterScore = -50;
 
+	public int correctLetterTime = 5;
+	public int wordTime = 30;
+	public int wrongLetterTime = -10;
+
 	void Awake()
 	{
-		controller = this;
+
 	}
 
 	void Start()
 	{
-		scoreDisplay.text = "Score: 0";
+		scoreDisplay.text = string.Format("Score: {0}", GameData.dataHolder.score);
 	}
 
-	public void End()
+	/// <summary>
+	/// Adds theinput number of seconds to the time remaining on the GameTimer.
+	/// </summary>
+	/// <param name="seconds">The number of seconds to add</param>
+	public void AddTime(ScoreEvent scoreEv)
+	{
+		switch(scoreEv)
+		{
+			case ScoreEvent.CorrectLetter:
+				timer.IncreaseTimeRemaining(correctLetterTime);
+				break;
+				
+			case ScoreEvent.CompletedWord:
+				timer.IncreaseTimeRemaining(wordTime);
+				break;
+
+			case ScoreEvent.WrongLetter:
+				timer.IncreaseTimeRemaining(wrongLetterTime);
+				break;
+
+			default: throw new NotImplementedException("A score event case that has not been implemented is being used.");
+		}
+	}
+
+	public void KillPlayer()
 	{
 		
 	}
 
+	public void OpenExit()
+	{
+
+	}
 
 // Score methods
 	/// <summary>
@@ -86,13 +117,13 @@ public class GameController : MonoBehaviour
 	/// <summary>
 	/// Sets the text of the statusDisplay
 	/// </summary>
-	/// <param name="text">The text to set it to</param>
+	/// <param name="text">The text to set</param>
 	public void SetStatusText(string text)
 	{
 		statusDisplay.text = text;
 	}
 	/// <summary>
-	/// Appends the input string to the text of the statusDisplay
+	/// Appends the input string to the statusDisplay.
 	/// </summary>
 	/// <param name="toAppend">The text to append</param>
 	public void AppendStatusText(string toAppend)
@@ -100,23 +131,23 @@ public class GameController : MonoBehaviour
 		statusDisplay.text += toAppend;
 	}
 	/// <summary>
-	/// Sets the color of the text of the statusDisplay
+	/// Sets the color of the text of the statusDisplay.
 	/// </summary>
-	/// <param name="color">The color to set it to</param>
+	/// <param name="color">The color to set</param>
 	public void SetStatusTextColor(Color color)
 	{
 		statusDisplay.color = color;
 	}
 	/// <summary>
-	/// Sets the text of the progressDisplay
+	/// Sets the text of the progressDisplay.
 	/// </summary>
-	/// <param name="text">The text to set it to</param>
+	/// <param name="text">The text to set</param>
 	public void SetProgressText(string text)
 	{
 		progressDisplay.text = text;
 	}
 	/// <summary>
-	/// Appends the input text to the text of the progressDisplay
+	/// Appends the input text to the progressDisplay.
 	/// </summary>
 	/// <param name="toAppend">The text to eppend</param>
 	public void AppendProgressText(string toAppend)
@@ -124,23 +155,23 @@ public class GameController : MonoBehaviour
 		progressDisplay.text += toAppend;
 	}
 	/// <summary>
-	/// Sets the color of the text of the progressDisplay
+	/// Sets the color of the text of the progressDisplay.
 	/// </summary>
-	/// <param name="color">The color to set it to</param>
-	public void SetProgressColor(Color color)
+	/// <param name="color">The color to set</param>
+	public void SetProgressTextColor(Color color)
 	{
 		progressDisplay.color = color;
 	}
 	/// <summary>
-	/// Sets the text of the scoreDisplay
+	/// Sets the text of the scoreDisplay.
 	/// </summary>
-	/// <param name="text">The text to set it to</param>
+	/// <param name="text">The text to set</param>
 	public void SetScoreText(string text)
 	{
 		scoreDisplay.text = text;
 	}
 	/// <summary>
-	/// Appends the input text to the text of the scoreDisplay
+	/// Appends the input text to the scoreDisplay.
 	/// </summary>
 	/// <param name="toAppend">The text to append</param>
 	public void AppendScoreText(string toAppend)
@@ -148,10 +179,10 @@ public class GameController : MonoBehaviour
 		scoreDisplay.text += toAppend;
 	}
 	/// <summary>
-	/// Sets the color of the text of the scoreDisplay
+	/// Sets the color of the text of the scoreDisplay.
 	/// </summary>
-	/// <param name="color">The color to set it to</param>
-	public void SetScoreColor(Color color)
+	/// <param name="color">The color to set</param>
+	public void SetScoreTextColor(Color color)
 	{
 		scoreDisplay.color = color;
 	}

@@ -13,12 +13,14 @@ public class LetterManager : MonoBehaviour
 	List<char> letters;
 	string goal;
 
+	GameController controller;
 	public LetterSpawner spawner;
 	public int respawnDuration = 3;
 
 	void Awake()
 	{
 		letters = new List<char>();
+		controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
 	}
 
 	void Start()
@@ -33,7 +35,6 @@ public class LetterManager : MonoBehaviour
 		foreach (char ch in letters)
 			word += ch;
 		word = word.ToUpper();
-		GameController.controller.SetProgressText(word);
 
 		bool isRightLetter = CheckWord(word);
 		/*
@@ -42,26 +43,30 @@ public class LetterManager : MonoBehaviour
 		if (isRightLetter && word.Equals(goal))
 		{
 			Debug.Log(string.Format("Word complete: {0}", goal));
-			GameController.controller.SetProgressColor(Color.green);
-			GameController.controller.SetProgressText("Word Complete!");
-			GameController.controller.UpdateScore(GameController.ScoreEvent.CompletedWord, goal.Length);
+			controller.SetStatusTextColor(Color.yellow);
+			controller.SetStatusText("Word Complete!");
+			controller.UpdateScore(GameController.ScoreEvent.CompletedWord, goal.Length);
+			controller.AddTime(GameController.ScoreEvent.CompletedWord);
 			StartCoroutine("CycleWord");
 		}
 		else if (!isRightLetter)
 		{
 			Debug.Log(string.Format("Incorrect letter picked up: {0}", word[word.Length - 1]));
-			GameController.controller.SetProgressColor(Color.red);
-			GameController.controller.SetProgressText(string.Format("Incorrect letter: {0}", word[word.Length - 1]));
-			GameController.controller.UpdateScore(GameController.ScoreEvent.WrongLetter);
+			controller.SetStatusTextColor(Color.red);
+			controller.SetStatusText(string.Format("Incorrect letter: {0}", word[word.Length - 1]));
+			controller.UpdateScore(GameController.ScoreEvent.WrongLetter);
+			controller.AddTime(GameController.ScoreEvent.WrongLetter);
 			StartCoroutine("CycleWord");
 		}
 		else
 		{
 			Debug.Log(string.Format("Correct letter picked up: {0}", word[word.Length - 1]));
-			GameController.controller.UpdateScore(GameController.ScoreEvent.CorrectLetter);
+			controller.SetProgressText(string.Format("Word: <color=\"#00CECEFF\">{0}</color>{1}", word, goal.Substring(word.Length)));
+			controller.UpdateScore(GameController.ScoreEvent.CorrectLetter);
+			controller.AddTime(GameController.ScoreEvent.CorrectLetter);
 		}
 
-		GameController.controller.SetScoreText(string.Format("Score: {0}", GameData.dataHolder.score));
+		controller.SetScoreText(string.Format("Score: {0}", GameData.dataHolder.score));
 	}
 
 	/// <summary>
@@ -97,12 +102,11 @@ public class LetterManager : MonoBehaviour
 		// Wait a certain amount of time before creating the new word
 		for (int i = respawnDuration; i > 0; --i)
 		{
-			GameController.controller.SetStatusText("New word in " + i);
+			controller.SetProgressText("New word in " + i);
 			yield return new WaitForSeconds(1);
 		}
 
-		GameController.controller.SetProgressText(string.Empty);
-		GameController.controller.SetProgressColor(Color.black);
+		controller.SetStatusText(string.Empty);
 		GetNextWordGoal();
 	}
 
@@ -114,7 +118,7 @@ public class LetterManager : MonoBehaviour
 
 		// Set that word as the goal
 		goal = chosen.ToUpper();
-		GameController.controller.SetStatusText(string.Format("Goal: {0}", goal));
+		controller.SetProgressText(string.Format("Word: {0}", goal));
 		Debug.Log(string.Format("Goal is {0}", goal));
 
 		// Spawn letters
