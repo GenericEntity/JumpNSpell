@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 using System;
 
@@ -61,13 +60,19 @@ public class GameController : MonoBehaviour
 
 	public void KillPlayer()
 	{
-		
+		Debug.Log("Player killed");
 	}
 
 	public void OpenExit()
 	{
-
+		Debug.Log("Exit opened");
 	}
+
+	public void ChargeTimeTank(long seconds)
+	{
+		Debug.Log(string.Format("Charge tank by {0} seconds", seconds));
+	}
+
 
 // Score methods
 	/// <summary>
