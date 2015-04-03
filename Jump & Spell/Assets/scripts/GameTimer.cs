@@ -8,8 +8,8 @@ public class GameTimer : MonoBehaviour
 
 	public long maxSeconds = 180;
 	public long startingSeconds = 90;
-	long secondsRemaining;
-	bool gameOver = false;
+	private long secondsRemaining;
+	private bool gameOver = false;
 
 	public Slider timeLeftSlider;
 	public Text timeLeftNumberDisplay;

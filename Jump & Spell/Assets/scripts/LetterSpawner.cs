@@ -6,11 +6,13 @@ using System.Linq;
 
 public class LetterSpawner : MonoBehaviour
 {
-	GameObject[] spawnPoints; // Used to mark the locations in the scene where letters spawn
-	List<GameObject> availableSpawnPoints; // Used to hold all spawn points which are available for use
-	List<GameObject> spawns;	// Used to hold all spawned letter instances
+	private GameObject[] spawnPoints; // Used to mark the locations in the scene where letters spawn
+	private List<GameObject> availableSpawnPoints; // Used to hold all spawn points which are available for use
+	private List<GameObject> spawns;	// Used to hold all spawned letter instances
 	public Sprite[] sprites;	// Used to reference sprites for letter spawns
 	public GameObject letterPrefab;	// The prefab referenced for spawning new letters
+
+	private Vector3 regularLetterScale;
 
 	void Awake()
 	{
@@ -53,7 +55,7 @@ public class LetterSpawner : MonoBehaviour
 			for (int i = 0; i < sprites.Length; ++i )
 				if(sprites[i].name.Equals(c.ToString()))
 				{
-					justAdded.GetComponent<SpriteRenderer>().sprite = sprites[i];
+					justAdded.GetComponentInChildren<SpriteRenderer>().sprite = sprites[i];
 					break;
 				}
 		}
@@ -70,7 +72,31 @@ public class LetterSpawner : MonoBehaviour
 			int index = Random.Range(0, sprites.Length);
 			Sprite chosenSprite = sprites[index];
 			justAdded.GetComponent<PickUpLetter>().letter = chosenSprite.name[0];
-			justAdded.GetComponent<SpriteRenderer>().sprite = chosenSprite;
+			justAdded.GetComponentInChildren<SpriteRenderer>().sprite = chosenSprite;
+		}
+
+		regularLetterScale = spawns[0].GetComponentInChildren<Transform>().localScale;
+	}
+
+	public void InflateLetters(float scaleFactor)
+	{
+		for (int i = 0; i < spawns.Count; ++i )
+		{
+			if (spawns[i].activeInHierarchy)
+			{
+				Transform t = spawns[i].GetComponentInChildren<Transform>();
+				Vector3 scale = t.localScale;
+				t.localScale = new Vector3(scale.x * scaleFactor, scale.y * scaleFactor, scale.z);
+			}
+		}
+	}
+
+	public void DeflateLetters()
+	{
+		for (int i = 0; i < spawns.Count; ++i)
+		{
+			if(spawns[i].activeInHierarchy)
+				spawns[i].GetComponentInChildren<Transform>().localScale = regularLetterScale;
 		}
 	}
 }

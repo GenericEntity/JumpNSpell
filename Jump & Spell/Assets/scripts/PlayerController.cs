@@ -7,9 +7,9 @@ public class PlayerController : MonoBehaviour
 
 	public float jumpForce = 700F;
 
-	bool grounded = false;
+	private bool grounded = false;
+	private float groundRadius = 0.03F;
 	public Transform groundCheck; // makes detecting the ground simpler
-	float groundRadius = 0.03F;
 	public LayerMask whatIsGround;
 
 	// Animating physics, so use FixedUpdate

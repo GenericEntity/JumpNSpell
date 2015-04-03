@@ -7,13 +7,13 @@ using System;
 public class LetterManager : MonoBehaviour
 {
 	/*** TEST IMPLEMENTATION ***/
-	string[] wordlist = { "first", "crackers", "practice", "light", "out", "balloon", "bought", "tonight" };
+	private string[] wordlist = { "first", "crackers", "practice", "light", "out", "balloon", "bought", "tonight" };
 	/*** TEST IMPLEMENTATION ***/
 
-	List<char> letters;
-	string goal;
+	private List<char> letters;
+	private string goal;
 
-	GameController controller;
+	private GameController controller;
 	public LetterSpawner spawner;
 	public int respawnDuration = 3;
 

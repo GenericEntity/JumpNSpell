@@ -6,7 +6,7 @@ public class GameStopwatch : MonoBehaviour
 {
 	GameController controller;
 	
-	long secondsLived = 0;
+	private long secondsLived = 0;
 	public long goalInSeconds = 240;
 	public Slider timeGoalSlider;
 	public Text timeGoalNumberDisplay;

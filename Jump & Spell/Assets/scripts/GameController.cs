@@ -15,6 +15,8 @@ public class GameController : MonoBehaviour
 	public Text progressDisplay;
 	public Text scoreDisplay;
 	public GameTimer timer;
+	PlayerController player;
+	LetterSpawner spawner;
 
 	public int letterScore = 10;
 	public int wordScorePerLetter = 20;
@@ -26,7 +28,8 @@ public class GameController : MonoBehaviour
 
 	void Awake()
 	{
-
+		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+		spawner = GameObject.FindGameObjectWithTag("Spawner").GetComponent<LetterSpawner>();
 	}
 
 	void Start()
@@ -71,6 +74,26 @@ public class GameController : MonoBehaviour
 	public void ChargeTimeTank(long seconds)
 	{
 		Debug.Log(string.Format("Charge tank by {0} seconds", seconds));
+	}
+
+	/// <summary>
+	/// Enables or disables the player's controller script.
+	/// </summary>
+	/// <param name="isEnabled">true to enable, false to disable</param>
+	public void ToggleUserControl(bool isEnabled)
+	{
+		if(player.enabled != isEnabled)
+			player.enabled = isEnabled;
+	}
+
+	public void InflateLetters(float scaleFactor)
+	{
+		spawner.InflateLetters(scaleFactor);
+	}
+
+	public void DeflateLetters()
+	{
+		spawner.DeflateLetters();
 	}
 
 
