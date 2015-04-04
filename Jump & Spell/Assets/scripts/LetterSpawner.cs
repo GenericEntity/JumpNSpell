@@ -12,6 +12,8 @@ public class LetterSpawner : MonoBehaviour
 	public Sprite[] sprites;	// Used to reference sprites for letter spawns
 	public GameObject letterPrefab;	// The prefab referenced for spawning new letters
 
+	public LetterInflater inflater;
+
 	public List<GameObject> Spawns
 	{
 		get { return spawns; }
@@ -58,7 +60,7 @@ public class LetterSpawner : MonoBehaviour
 			for (int i = 0; i < sprites.Length; ++i )
 				if(sprites[i].name.Equals(c.ToString()))
 				{
-					justAdded.GetComponentInChildren<SpriteRenderer>().sprite = sprites[i];
+					justAdded.GetComponent<SpriteRenderer>().sprite = sprites[i];
 					break;
 				}
 		}
@@ -75,7 +77,10 @@ public class LetterSpawner : MonoBehaviour
 			int index = Random.Range(0, sprites.Length);
 			Sprite chosenSprite = sprites[index];
 			justAdded.GetComponent<PickUpLetter>().letter = chosenSprite.name[0];
-			justAdded.GetComponentInChildren<SpriteRenderer>().sprite = chosenSprite;
+			justAdded.GetComponent<SpriteRenderer>().sprite = chosenSprite;
 		}
+
+		// Maintains the scale size if the camera was zoomed out when respawning
+		inflater.MaintainLetterSpritesInflation();
 	}
 }

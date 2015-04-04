@@ -14,9 +14,9 @@ public class GameController : MonoBehaviour
 	public Text statusDisplay;
 	public Text progressDisplay;
 	public Text scoreDisplay;
-	public GameTimer timer;
-	PlayerController player;
-	LetterSpawner spawner;
+	public GameTimer deathTimer;
+	public GameStopwatch rescueTimer;
+	private PlayerController player;
 
 	public int letterScore = 10;
 	public int wordScorePerLetter = 20;
@@ -24,17 +24,18 @@ public class GameController : MonoBehaviour
 
 	public int correctLetterTime = 5;
 	public int wordTime = 30;
-	public int wrongLetterTime = -10;
+
+	private bool playerHasLost;
 
 	void Awake()
 	{
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-		spawner = GameObject.FindGameObjectWithTag("Spawner").GetComponent<LetterSpawner>();
 	}
 
 	void Start()
 	{
 		scoreDisplay.text = string.Format("Score: {0}", GameData.dataHolder.score);
+		playerHasLost = false;
 	}
 
 	/// <summary>
@@ -46,15 +47,14 @@ public class GameController : MonoBehaviour
 		switch(scoreEv)
 		{
 			case ScoreEvent.CorrectLetter:
-				timer.IncreaseTimeRemaining(correctLetterTime);
+				deathTimer.IncreaseTimeRemaining(correctLetterTime);
 				break;
 				
 			case ScoreEvent.CompletedWord:
-				timer.IncreaseTimeRemaining(wordTime);
+				deathTimer.IncreaseTimeRemaining(wordTime);
 				break;
 
 			case ScoreEvent.WrongLetter:
-				timer.IncreaseTimeRemaining(wrongLetterTime);
 				break;
 
 			default: throw new NotImplementedException("A score event case that has not been implemented is being used.");
@@ -64,6 +64,9 @@ public class GameController : MonoBehaviour
 	public void KillPlayer()
 	{
 		Debug.Log("Player killed");
+		playerHasLost = true;
+		DisablePlayerControl();
+		rescueTimer.Stop();
 	}
 
 	public void OpenExit()
@@ -76,14 +79,22 @@ public class GameController : MonoBehaviour
 		Debug.Log(string.Format("Charge tank by {0} seconds", seconds));
 	}
 
+	public void DisablePlayerControl()
+	{
+		player.enabled = false;
+	}
+
 	/// <summary>
-	/// Enables or disables the player's controller script.
+	/// Enables or disables the player's controller script, if the player has not lost. Otherwise, does nothing.
 	/// </summary>
 	/// <param name="isEnabled">true to enable, false to disable</param>
-	public void ToggleUserControl(bool isEnabled)
+	public void TogglePlayerControl(bool isEnabled)
 	{
-		if(player.enabled != isEnabled)
+		if(!playerHasLost && 
+			player.enabled != isEnabled)
+		{
 			player.enabled = isEnabled;
+		}
 	}
 
 

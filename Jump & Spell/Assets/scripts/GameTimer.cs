@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class GameTimer : MonoBehaviour
 {
-	GameController controller;
+	private GameController controller;
 
 	public long maxSeconds = 180;
 	public long startingSeconds = 90;
@@ -100,5 +100,13 @@ public class GameTimer : MonoBehaviour
 		timeLeftNumberDisplay.color = Color.red;
 		CancelInvoke("TickDown");
 		controller.KillPlayer();
+	}
+
+	/// <summary>
+	/// Stops the timer from ticking.
+	/// </summary>
+	public void Stop()
+	{
+		CancelInvoke("TickDown");
 	}
 }

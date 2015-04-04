@@ -4,7 +4,7 @@ using System;
 
 public class GameStopwatch : MonoBehaviour
 {
-	GameController controller;
+	private GameController controller;
 	
 	private long secondsLived = 0;
 	public long goalInSeconds = 240;
@@ -51,5 +51,13 @@ public class GameStopwatch : MonoBehaviour
 			CancelInvoke("CountUp");
 			controller.OpenExit();
 		}
+	}
+
+	/// <summary>
+	/// Stops the stopwatch from ticking.
+	/// </summary>
+	public void Stop()
+	{
+		CancelInvoke("CountUp");
 	}
 }

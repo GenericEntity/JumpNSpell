@@ -18,7 +18,6 @@ public class CameraController : MonoBehaviour
 	public BoxCollider2D levelViewArea;
 	private float originalOrthSize;
 	public float zoomSpeed = 10F;
-	private bool isInflated = false;
 
 	public LetterInflater inflater;
 
@@ -60,22 +59,37 @@ public class CameraController : MonoBehaviour
 				newOrthSize = levelViewArea.size.y / 2;
 			}
 
-			thisCam.orthographicSize = Mathf.Lerp(currOrthSize, newOrthSize, Time.deltaTime * zoomSpeed);
+			thisCam.orthographicSize = Mathf.Lerp(
+				currOrthSize, 
+				newOrthSize, 
+				Time.deltaTime * zoomSpeed);
 
-			zoomX = Mathf.Lerp(zoomX, levelViewArea.transform.position.x, Time.deltaTime * zoomSpeed);
-			zoomY = Mathf.Lerp(zoomY, levelViewArea.transform.position.y, Time.deltaTime * zoomSpeed);
+			zoomX = Mathf.Lerp(
+				zoomX, 
+				levelViewArea.transform.position.x, 
+				Time.deltaTime * zoomSpeed);
+			zoomY = Mathf.Lerp(
+				zoomY, 
+				levelViewArea.transform.position.y, 
+				Time.deltaTime * zoomSpeed);
 
-			zoomX = Mathf.Clamp(zoomX, _min.x + cameraHalfWidth, _max.x - cameraHalfWidth);
-			zoomY = Mathf.Clamp(zoomY, _min.y + currOrthSize, _max.y - currOrthSize);
+			zoomX = Mathf.Clamp(
+				zoomX, 
+				_min.x + cameraHalfWidth, 
+				_max.x - cameraHalfWidth);
+			zoomY = Mathf.Clamp(
+				zoomY, 
+				_min.y + currOrthSize, 
+				_max.y - currOrthSize);
 
-			transform.position = new Vector3(zoomX, zoomY, transform.position.z);
-			controller.ToggleUserControl(false);
+			transform.position = new Vector3(
+				zoomX, 
+				zoomY, 
+				transform.position.z);
 
-			if(!isInflated)
-			{
-				inflater.InflateLetters(newOrthSize / originalOrthSize);
-				isInflated = true;
-			}
+			controller.TogglePlayerControl(false);
+
+			inflater.InflateLetterSprites(newOrthSize / originalOrthSize);
 
 			return;
 		}
@@ -87,13 +101,9 @@ public class CameraController : MonoBehaviour
 		}
 
 		// User has control as long as not holding down the zoom key (because code will not reach here if so)
-		controller.ToggleUserControl(true);
-		if(isInflated)
-		{
-			inflater.DeflateLetters();
-			isInflated = false;
-		}
-			
+		controller.TogglePlayerControl(true);
+		
+		inflater.DeflateLetterSprites();
 
 		var x = transform.position.x;
 		var y = transform.position.y;
@@ -101,15 +111,30 @@ public class CameraController : MonoBehaviour
 		if (IsFollowing)
 		{
 			if (Mathf.Abs(x - player.position.x) > margin.x)
-				x = Mathf.Lerp(x, player.position.x, smoothing.x * Time.deltaTime);
+				x = Mathf.Lerp(
+					x, 
+					player.position.x, 
+					smoothing.x * Time.deltaTime);
 
 			if (Mathf.Abs(y - player.position.y) > margin.y)
-				y = Mathf.Lerp(y, player.position.y, smoothing.y * Time.deltaTime);
+				y = Mathf.Lerp(
+					y, 
+					player.position.y, 
+					smoothing.y * Time.deltaTime);
 		}
 
-		x = Mathf.Clamp(x, _min.x + cameraHalfWidth, _max.x - cameraHalfWidth);
-		y = Mathf.Clamp(y, _min.y + currOrthSize, _max.y - currOrthSize);
+		x = Mathf.Clamp(
+			x, 
+			_min.x + cameraHalfWidth,
+			_max.x - cameraHalfWidth);
+		y = Mathf.Clamp(
+			y, 
+			_min.y + currOrthSize, 
+			_max.y - currOrthSize);
 
-		transform.position = new Vector3(x, y, transform.position.z);
+		transform.position = new Vector3(
+			x, 
+			y, 
+			transform.position.z);
 	}
 }
