@@ -20,6 +20,8 @@ public class CameraController : MonoBehaviour
 	public float zoomSpeed = 10F;
 	private bool isInflated = false;
 
+	public LetterInflater inflater;
+
 	public bool IsFollowing { get; set; }
 
 	void Awake()
@@ -71,7 +73,7 @@ public class CameraController : MonoBehaviour
 
 			if(!isInflated)
 			{
-				controller.InflateLetters(newOrthSize / originalOrthSize);
+				inflater.InflateLetters(newOrthSize / originalOrthSize);
 				isInflated = true;
 			}
 
@@ -88,7 +90,7 @@ public class CameraController : MonoBehaviour
 		controller.ToggleUserControl(true);
 		if(isInflated)
 		{
-			controller.DeflateLetters();
+			inflater.DeflateLetters();
 			isInflated = false;
 		}
 			
