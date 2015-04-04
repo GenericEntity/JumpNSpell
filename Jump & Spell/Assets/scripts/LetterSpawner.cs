@@ -12,10 +12,7 @@ public class LetterSpawner : MonoBehaviour
 	public Sprite[] sprites;	// Used to reference sprites for letter spawns
 	public GameObject letterPrefab;	// The prefab referenced for spawning new letters
 
-	public List<GameObject> Spawns
-	{
-		get { return spawns; }
-	}
+	private Vector3 regularLetterScale;
 
 	void Awake()
 	{
@@ -76,6 +73,30 @@ public class LetterSpawner : MonoBehaviour
 			Sprite chosenSprite = sprites[index];
 			justAdded.GetComponent<PickUpLetter>().letter = chosenSprite.name[0];
 			justAdded.GetComponentInChildren<SpriteRenderer>().sprite = chosenSprite;
+		}
+
+		regularLetterScale = spawns[0].GetComponentInChildren<Transform>().localScale;
+	}
+
+	public void InflateLetters(float scaleFactor)
+	{
+		for (int i = 0; i < spawns.Count; ++i )
+		{
+			if (spawns[i].activeInHierarchy)
+			{
+				Transform t = spawns[i].GetComponentInChildren<Transform>();
+				Vector3 scale = t.localScale;
+				t.localScale = new Vector3(scale.x * scaleFactor, scale.y * scaleFactor, scale.z);
+			}
+		}
+	}
+
+	public void DeflateLetters()
+	{
+		for (int i = 0; i < spawns.Count; ++i)
+		{
+			if(spawns[i].activeInHierarchy)
+				spawns[i].GetComponentInChildren<Transform>().localScale = regularLetterScale;
 		}
 	}
 }

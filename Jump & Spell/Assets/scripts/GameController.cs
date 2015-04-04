@@ -86,6 +86,16 @@ public class GameController : MonoBehaviour
 			player.enabled = isEnabled;
 	}
 
+	public void InflateLetters(float scaleFactor)
+	{
+		spawner.InflateLetters(scaleFactor);
+	}
+
+	public void DeflateLetters()
+	{
+		spawner.DeflateLetters();
+	}
+
 
 // Score methods
 	/// <summary>
