@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System;
 
-public class LetterManager : MonoBehaviour
+public class WordManager : MonoBehaviour
 {
 	/*** TEST IMPLEMENTATION ***/
 	private string[] wordlist = { "first", "crackers", "practice", "light", "out", "balloon", "bought", "tonight" };
@@ -14,7 +14,6 @@ public class LetterManager : MonoBehaviour
 	private string goal;
 
 	private GameController controller;
-	public LetterSpawner spawner;
 	public int respawnDuration = 3;
 
 	void Awake()
@@ -97,7 +96,7 @@ public class LetterManager : MonoBehaviour
 	{
 		// Delete all letters in the list
 		letters.Clear();
-		spawner.ClearAllLetters();
+		controller.ClearLetterSpawns();
 
 		// Wait a certain amount of time before creating the new word
 		for (int i = respawnDuration; i > 0; --i)
@@ -122,7 +121,7 @@ public class LetterManager : MonoBehaviour
 		Debug.Log(string.Format("Goal is {0}", goal));
 
 		// Spawn letters
-		spawner.SpawnNewLetters(goal);
+		controller.SpawnNewLetters(goal);
 	}
 
 

@@ -14,8 +14,11 @@ public class GameController : MonoBehaviour
 	public Text statusDisplay;
 	public Text progressDisplay;
 	public Text scoreDisplay;
+	public GameObject gameOverPanel;
 	public GameTimer deathTimer;
 	public GameStopwatch rescueTimer;
+	public LetterSpawner spawner;
+	public GameObject levelExit;
 	private PlayerController player;
 
 	public int letterScore = 10;
@@ -26,14 +29,17 @@ public class GameController : MonoBehaviour
 	public int wordTime = 30;
 
 	private bool playerHasLost;
+	private int scoreAtStart;
 
 	void Awake()
 	{
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+		scoreAtStart = GameData.dataHolder.score;
 	}
 
 	void Start()
 	{
+		ToggleGameOverPanel(false);
 		scoreDisplay.text = string.Format("Score: {0}", GameData.dataHolder.score);
 		playerHasLost = false;
 	}
@@ -66,12 +72,16 @@ public class GameController : MonoBehaviour
 		Debug.Log("Player killed");
 		playerHasLost = true;
 		DisablePlayerControl();
+		DisableLetterPickup();
 		rescueTimer.Stop();
+		ToggleGameOverPanel(true);
+		
 	}
 
 	public void OpenExit()
 	{
 		Debug.Log("Exit opened");
+		levelExit.SetActive(true);
 	}
 
 	public void ChargeTimeTank(long seconds)
@@ -82,6 +92,37 @@ public class GameController : MonoBehaviour
 	public void DisablePlayerControl()
 	{
 		player.enabled = false;
+	}
+
+	public void RestartLevel()
+	{
+		GameData.dataHolder.score = scoreAtStart;
+		Application.LoadLevel(Application.loadedLevel);
+	}
+
+	public void ToggleGameOverPanel(bool willEnable)
+	{
+		gameOverPanel.SetActive(willEnable);
+	}
+
+	public void ClearLetterSpawns()
+	{
+		spawner.ClearAllLetters();
+	}
+
+	public void SpawnNewLetters(string goal)
+	{
+		spawner.SpawnNewLetters(goal);
+	}
+
+	public void DisableLetterPickup()
+	{
+		spawner.DisableLetterPickup();
+	}
+
+	public void ExitLevel()
+	{
+		Debug.Log("Level completed");
 	}
 
 	/// <summary>

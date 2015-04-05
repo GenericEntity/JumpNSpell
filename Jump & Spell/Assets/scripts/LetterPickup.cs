@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PickUpLetter : MonoBehaviour 
+public class LetterPickup : MonoBehaviour 
 {
 	public char letter;
 
@@ -14,7 +14,7 @@ public class PickUpLetter : MonoBehaviour
 		gameObject.SetActive(false);
 		Debug.Log(string.Format("{0} was picked up.", letter));
 
-		LetterManager let = other.GetComponent<LetterManager>();
+		WordManager let = other.GetComponent<WordManager>();
 		let.AddLetter(letter);
 	}
 }
