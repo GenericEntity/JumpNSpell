@@ -47,16 +47,17 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\scripts\CameraController.cs" />
+     <Compile Include="Assets\scripts\CameraZoom_JnS.cs" />
      <Compile Include="Assets\scripts\GameController.cs" />
      <Compile Include="Assets\scripts\GameData.cs" />
      <Compile Include="Assets\scripts\GameStopwatch.cs" />
      <Compile Include="Assets\scripts\GameTimer.cs" />
-     <Compile Include="Assets\scripts\LetterInflater.cs" />
+     <Compile Include="Assets\scripts\LetterManager.cs" />
      <Compile Include="Assets\scripts\LetterPickup.cs" />
-     <Compile Include="Assets\scripts\LetterSpawner.cs" />
      <Compile Include="Assets\scripts\LevelExit.cs" />
      <Compile Include="Assets\scripts\PlayerBounds.cs" />
      <Compile Include="Assets\scripts\PlayerController.cs" />
+     <Compile Include="Assets\scripts\UIManager.cs" />
      <Compile Include="Assets\scripts\WordManager.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
