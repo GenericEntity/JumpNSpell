@@ -55,6 +55,7 @@
      <Compile Include="Assets\scripts\LetterPickup.cs" />
      <Compile Include="Assets\scripts\LetterSpawner.cs" />
      <Compile Include="Assets\scripts\LevelExit.cs" />
+     <Compile Include="Assets\scripts\PlayerBounds.cs" />
      <Compile Include="Assets\scripts\PlayerController.cs" />
      <Compile Include="Assets\scripts\WordManager.cs" />
  <Reference Include="UnityEngine.UI">

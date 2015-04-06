@@ -19,17 +19,11 @@ public class PlayerController : MonoBehaviour
 
 		float move = Input.GetAxis("Horizontal");
 		GetComponent<Rigidbody2D>().velocity = new Vector2(move * maxSpeed, GetComponent<Rigidbody2D>().velocity.y);
-
 	}
 
 	void Update()
 	{
 		if(Input.GetKeyDown(KeyCode.Space) && grounded)
 			GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
-	}
-
-	void OnTriggerExit2D(Collider2D col)
-	{
-		Application.LoadLevel(Application.loadedLevel);
 	}
 }

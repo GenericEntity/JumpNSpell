@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour
 	public GameObject levelExit;
 	private PlayerController player;
 
-	public int letterScore = 10;
+	private int letterScore = 10;
 	public int wordScorePerLetter = 20;
 	public int wrongLetterScore = -50;
 
