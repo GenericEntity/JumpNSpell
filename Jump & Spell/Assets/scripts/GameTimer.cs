@@ -5,18 +5,17 @@ using UnityEngine.UI;
 public class GameTimer : MonoBehaviour
 {
 	private GameController controller;
+	private UIManager uiManager;
 
 	public long maxSeconds = 180;
 	public long startingSeconds = 90;
 	private long secondsRemaining;
 	private bool gameOver = false;
 
-	public Slider timeLeftSlider;
-	public Text timeLeftNumberDisplay;
-
 	void Awake()
 	{
 		controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+		uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>();
 
 		// Check for invalid values
 		if (maxSeconds < 0 ||
@@ -32,12 +31,13 @@ public class GameTimer : MonoBehaviour
 		secondsRemaining = startingSeconds;
 
 		// Init number display
-		timeLeftNumberDisplay.text = string.Format("{0:D2}:{1:D2}", secondsRemaining / 60, secondsRemaining % 60);
+		uiManager.SetTimeLeftText(string.Format("{0:D2}:{1:D2}", secondsRemaining / 60, secondsRemaining % 60));
 
 		// Init slider
-		timeLeftSlider.minValue = 0.0F;
-		timeLeftSlider.maxValue = maxSeconds;
-		timeLeftSlider.value = secondsRemaining;
+		uiManager.InitTimeLeftSlider(
+			0F, 
+			maxSeconds, 
+			secondsRemaining);
 
 		// Start countdown
 		InvokeRepeating("TickDown", 1.0F, 1.0F);
@@ -49,10 +49,10 @@ public class GameTimer : MonoBehaviour
 		--secondsRemaining;
 
 		// Update number display
-		timeLeftNumberDisplay.text = string.Format("{0:D2}:{1:D2}", secondsRemaining / 60, secondsRemaining % 60);
+		uiManager.SetTimeLeftText(string.Format("{0:D2}:{1:D2}", secondsRemaining / 60, secondsRemaining % 60));
 
 		// Update slider
-		timeLeftSlider.value = secondsRemaining;
+		uiManager.SetTimeLeftSliderValue(secondsRemaining);
 
 		// CHeck for timeout
 		if(secondsRemaining == 0)
@@ -88,16 +88,16 @@ public class GameTimer : MonoBehaviour
 		}
 
 		// Update number display
-		timeLeftNumberDisplay.text = string.Format("{0:D2}:{1:D2}", secondsRemaining / 60, secondsRemaining % 60);
+		uiManager.SetTimeLeftText(string.Format("{0:D2}:{1:D2}", secondsRemaining / 60, secondsRemaining % 60));
 
 		// Update slider
-		timeLeftSlider.value = secondsRemaining;
+		uiManager.SetTimeLeftSliderValue(secondsRemaining);
 	}
 
 	void KillPlayer()
 	{
 		gameOver = true;
-		timeLeftNumberDisplay.color = Color.red;
+		uiManager.SetTimeLeftTextColor(Color.red);
 		CancelInvoke("TickDown");
 		controller.KillPlayer();
 	}

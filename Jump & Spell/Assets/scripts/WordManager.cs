@@ -135,6 +135,4 @@ public class WordManager : MonoBehaviour
 		// Spawn letters
 		lManager.SpawnNewLetters(goal);
 	}
-
-
 }

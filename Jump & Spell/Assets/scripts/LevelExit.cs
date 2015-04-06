@@ -5,7 +5,7 @@ public class LevelExit : MonoBehaviour
 {
 	private GameController controller;
 
-	void Start()
+	void Awake()
 	{
 		controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
 	}

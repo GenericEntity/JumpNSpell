@@ -3,7 +3,8 @@ using System.Collections;
 
 public class LetterPickup : MonoBehaviour 
 {
-	public char letter;
+	[SerializeField]
+	private char letter;
 
 	public void OnTriggerEnter2D(Collider2D other)
 	{

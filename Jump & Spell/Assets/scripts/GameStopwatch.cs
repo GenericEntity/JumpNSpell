@@ -5,15 +5,15 @@ using System;
 public class GameStopwatch : MonoBehaviour
 {
 	private GameController controller;
+	private UIManager uiManager;
 	
 	private long secondsLived = 0;
 	public long goalInSeconds = 240;
-	public Slider timeGoalSlider;
-	public Text timeGoalNumberDisplay;
 
 	void Awake()
 	{
 		controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+		uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>();
 
 		// Check for invalid values
 		if (goalInSeconds <= 0)
@@ -23,12 +23,13 @@ public class GameStopwatch : MonoBehaviour
 	void Start()
 	{
 		// Init number display
-		timeGoalNumberDisplay.text = "00:00";
+		uiManager.SetTimeGoalText("00:00");
 
 		// Init slider
-		timeGoalSlider.minValue = 0F;
-		timeGoalSlider.maxValue = goalInSeconds;
-		timeGoalSlider.value = 0F;
+		uiManager.InitTimeGoalSlider(
+			0F,
+			goalInSeconds,
+			0F);
 
 		// Start stopwatch
 		InvokeRepeating("CountUp", 1.0F, 1.0F);
@@ -40,10 +41,10 @@ public class GameStopwatch : MonoBehaviour
 		++secondsLived;
 
 		// Update number display
-		timeGoalNumberDisplay.text = string.Format("{0:D2}:{1:D2}", secondsLived / 60, secondsLived % 60);
+		uiManager.SetTimeGoalText(string.Format("{0:D2}:{1:D2}", secondsLived / 60, secondsLived % 60));
 
 		// Adjust slider
-		timeGoalSlider.value = secondsLived;
+		uiManager.SetTimeGoalSliderValue(secondsLived);
 
 		// Check for goal
 		if(secondsLived == goalInSeconds)
