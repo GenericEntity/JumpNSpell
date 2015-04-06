@@ -6,6 +6,12 @@ public class LetterPickup : MonoBehaviour
 	[SerializeField]
 	private char letter;
 
+	public char Letter
+	{
+		get { return letter; }
+		set { letter = value; }
+	}
+
 	public void OnTriggerEnter2D(Collider2D other)
 	{
 		var player = other.GetComponent<PlayerController>();

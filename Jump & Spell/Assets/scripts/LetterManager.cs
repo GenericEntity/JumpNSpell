@@ -71,7 +71,7 @@ using System.Linq;
 				availableSpawnPoints.RemoveAt(index);
 
 				// Give it an identity
-				justAdded.GetComponent<LetterPickup>().letter = c;
+				justAdded.GetComponent<LetterPickup>().Letter = c;
 				for (int i = 0; i < sprites.Length; ++i)
 					if (sprites[i].name.Equals(c.ToString()))
 					{
@@ -91,7 +91,7 @@ using System.Linq;
 				// Set it to a random character
 				int index = Random.Range(0, sprites.Length);
 				Sprite chosenSprite = sprites[index];
-				justAdded.GetComponent<LetterPickup>().letter = chosenSprite.name[0];
+				justAdded.GetComponent<LetterPickup>().Letter = chosenSprite.name[0];
 				justAdded.GetComponent<SpriteRenderer>().sprite = chosenSprite;
 			}
 
