@@ -20,6 +20,7 @@ public class GameController_JnS : MonoBehaviour
 	private GameStopwatch rescueTimer;
 	[SerializeField]
 	private GameObject levelExit;
+	private GameObject camera;
 	private PlayerController player;
 	private UIManager_JnS uiManager;
 	private LetterManager_JnS letterManager;
@@ -43,6 +44,7 @@ public class GameController_JnS : MonoBehaviour
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 		uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager_JnS>();
 		letterManager = GameObject.FindGameObjectWithTag("LetterManager").GetComponent<LetterManager_JnS>();
+		camera = GameObject.FindGameObjectWithTag("MainCamera");
 
 		scoreAtStart = GameData.dataHolder.score;
 	}
@@ -85,13 +87,15 @@ public class GameController_JnS : MonoBehaviour
 	public void DisablePlayerControl()
 	{
 		player.enabled = false;
+		camera.GetComponent<CameraZoom_JnS>().enabled = false;
+		levelExit.GetComponent<LevelExit_JnS>().enabled = false;
 	}
 
 	/// <summary>
 	/// Enables or disables the player's controller script, if the player has not lost. Otherwise, does nothing.
 	/// </summary>
 	/// <param name="isEnabled">true to enable, false to disable</param>
-	public void TogglePlayerControl(bool isEnabled)
+	public void TogglePlayerMovement(bool isEnabled)
 	{
 		if(!gameIsOver && 
 			player.enabled != isEnabled)

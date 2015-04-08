@@ -14,8 +14,6 @@ public class CameraZoom_JnS : MonoBehaviour
 	public float zoomSpeed = 10F;
 	private float originalOrthSize;
 
-	private bool willProcessZoom;
-
 	void Awake()
 	{
 		controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController_JnS>();
@@ -53,7 +51,7 @@ public class CameraZoom_JnS : MonoBehaviour
 			camController.Zoom(newOrthSize, zoomSpeed, true);
 			camController.MoveCamera(levelViewArea.transform.position, zoomSpeed, true);
 
-			controller.TogglePlayerControl(false);
+			controller.TogglePlayerMovement(false);
 
 			lManager.InflateLetterSprites(newOrthSize / originalOrthSize);
 		}
@@ -62,7 +60,7 @@ public class CameraZoom_JnS : MonoBehaviour
 			Debug.Log("ZoomIn");
 			camController.Zoom(originalOrthSize, zoomSpeed, true);
 			camController.IsFollowing = true;
-			controller.TogglePlayerControl(true);
+			controller.TogglePlayerMovement(true);
 			lManager.DeflateLetterSprites();
 		}
 	}
