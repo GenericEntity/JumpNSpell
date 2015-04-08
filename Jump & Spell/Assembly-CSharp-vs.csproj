@@ -46,19 +46,19 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\scripts\CameraController.cs" />
-     <Compile Include="Assets\scripts\CameraZoom_JnS.cs" />
-     <Compile Include="Assets\scripts\GameController.cs" />
-     <Compile Include="Assets\scripts\GameData.cs" />
-     <Compile Include="Assets\scripts\GameStopwatch.cs" />
-     <Compile Include="Assets\scripts\GameTimer.cs" />
-     <Compile Include="Assets\scripts\LetterManager.cs" />
-     <Compile Include="Assets\scripts\LetterPickup.cs" />
-     <Compile Include="Assets\scripts\LevelExit.cs" />
-     <Compile Include="Assets\scripts\PlayerBounds.cs" />
-     <Compile Include="Assets\scripts\PlayerController.cs" />
-     <Compile Include="Assets\scripts\UIManager.cs" />
-     <Compile Include="Assets\scripts\WordManager.cs" />
+     <Compile Include="Assets\scripts\Camera\CameraController.cs" />
+     <Compile Include="Assets\scripts\Camera\CameraZoom_JnS.cs" />
+     <Compile Include="Assets\scripts\Controllers\GameController_JnS.cs" />
+     <Compile Include="Assets\scripts\Controllers\LetterManager_JnS.cs" />
+     <Compile Include="Assets\scripts\Controllers\UIManager_JnS.cs" />
+     <Compile Include="Assets\scripts\Controllers\WordManager_JnS.cs" />
+     <Compile Include="Assets\scripts\Game Data\GameData.cs" />
+     <Compile Include="Assets\scripts\Items\LetterPickup_JnS.cs" />
+     <Compile Include="Assets\scripts\Items\LevelExit_JnS.cs" />
+     <Compile Include="Assets\scripts\Player\PlayerBounds.cs" />
+     <Compile Include="Assets\scripts\Player\PlayerController.cs" />
+     <Compile Include="Assets\scripts\Timers\GameStopwatch.cs" />
+     <Compile Include="Assets\scripts\Timers\GameTimer.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
