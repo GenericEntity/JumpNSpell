@@ -25,6 +25,11 @@ using System.Linq;
 			get { return spawns; }
 		}
 
+		public int SpawnPointCount
+		{
+			get { return spawnPoints.Length; }
+		}
+
 		void Awake()
 		{
 			spawnPoints = GameObject.FindGameObjectsWithTag("LetterSpawnPoint");

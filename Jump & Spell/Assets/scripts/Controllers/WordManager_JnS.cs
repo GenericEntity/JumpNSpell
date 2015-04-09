@@ -7,7 +7,8 @@ using System;
 public class WordManager_JnS : MonoBehaviour
 {
 	/*** TEST IMPLEMENTATION ***/
-	private string[] wordlist = { "first", "crackers", "practice", "light", "out", "balloon", "bought", "tonight", "sugar", "fierce", "halfway", "cupboard" };
+	private string[] wordlist = { "first", "crackers", "practice", "light", "out", "balloon", "bought", "tonight", "sugar", "fierce", "halfway", "cupboard", "even" };
+	private List<string>[] wordLists;
 	/*** TEST IMPLEMENTATION ***/
 
 	private List<char> letters;
@@ -17,6 +18,7 @@ public class WordManager_JnS : MonoBehaviour
 	private UIManager_JnS uiManager;
 	private LetterManager_JnS lManager;
 	public int respawnDuration = 3;
+	public int maxWordLength;
 
 	void Awake()
 	{
@@ -28,6 +30,43 @@ public class WordManager_JnS : MonoBehaviour
 
 	void Start()
 	{
+		// Find longest word
+		int longest = 0;
+		foreach (string word in wordlist)
+		{
+			if (word.Length > longest)
+				longest = word.Length;
+		}
+
+		// Create word lists indexed by word length
+		wordLists = new List<string>[longest];
+		for (int i = 0; i < wordLists.Length; ++i)
+		{
+			wordLists[i] = new List<string>();
+		}
+		// Populate word lists
+		foreach (string word in wordlist)
+		{
+			wordLists[word.Length - 1].Add(word);
+		}
+
+		int spawnCount = lManager.SpawnPointCount;
+
+		// Validate max word length
+		if (maxWordLength == null)
+		{
+			maxWordLength = Mathf.Min(spawnCount, longest);
+			Debug.Log(string.Format("No max word length was input. Value has defaulted to {0}", maxWordLength));
+		}
+		else if (maxWordLength > spawnCount ||
+			maxWordLength > longest)
+		{
+			maxWordLength = Mathf.Min(spawnCount, longest);
+			if (maxWordLength <= 0)
+				throw new Exception("For some reason, maxWordLength has ended up as zero or lower.");
+			Debug.Log(string.Format("The input max word length was too long. Value has defaulted to {0}", maxWordLength));
+		}
+
 		GetNextWordGoal();
 	}
 
@@ -124,7 +163,15 @@ public class WordManager_JnS : MonoBehaviour
 	private void GetNextWordGoal()
 	{
 		// Randomly select a new word
-		string chosen = wordlist[UnityEngine.Random.Range(0, wordlist.Length)];
+		int wordLength;
+		do
+		{
+			wordLength = UnityEngine.Random.Range(0, maxWordLength);
+		}
+		while (wordLists[wordLength].Count == 0);
+			
+		int wordIndex = UnityEngine.Random.Range(0, wordLists[wordLength].Count);
+		string chosen = wordLists[wordLength][wordIndex];
 		Debug.Log(string.Format("{0} has been chosen. NOTE: REFERENCE AN EXTERNAL DATABASE OR TEXT FILE IN FUTURE.\nIT IS CURRENTLY USING A BUILT-IN STRING ARRAY.", chosen));
 
 		// Set that word as the goal
