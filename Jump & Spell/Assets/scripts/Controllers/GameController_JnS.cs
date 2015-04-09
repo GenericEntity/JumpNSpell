@@ -20,7 +20,7 @@ public class GameController_JnS : MonoBehaviour
 	private GameStopwatch rescueTimer;
 	[SerializeField]
 	private GameObject levelExit;
-	private GameObject camera;
+	private GameObject sceneCam;
 	private PlayerController player;
 	private UIManager_JnS uiManager;
 	private LetterManager_JnS letterManager;
@@ -44,7 +44,7 @@ public class GameController_JnS : MonoBehaviour
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 		uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager_JnS>();
 		letterManager = GameObject.FindGameObjectWithTag("LetterManager").GetComponent<LetterManager_JnS>();
-		camera = GameObject.FindGameObjectWithTag("MainCamera");
+		sceneCam = GameObject.FindGameObjectWithTag("MainCamera");
 
 		scoreAtStart = GameData.dataHolder.score;
 	}
@@ -84,11 +84,32 @@ public class GameController_JnS : MonoBehaviour
 	}
 
 // Player Control
+	public void PauseGame()
+	{
+		DisablePlayerControl();
+		deathTimer.Stop();
+		rescueTimer.Stop();
+	}
+
+	public void UnpauseGame()
+	{
+		EnablePlayerControl();
+		deathTimer.Resume();
+		rescueTimer.Resume();
+	}
+
 	public void DisablePlayerControl()
 	{
 		player.enabled = false;
-		camera.GetComponent<CameraZoom_JnS>().enabled = false;
+		sceneCam.GetComponent<CameraZoom_JnS>().enabled = false;
 		levelExit.GetComponent<LevelExit_JnS>().enabled = false;
+	}
+
+	public void EnablePlayerControl()
+	{
+		player.enabled = true;
+		sceneCam.GetComponent<CameraZoom_JnS>().enabled = true;
+		levelExit.GetComponent<LevelExit_JnS>().enabled = true;
 	}
 
 	/// <summary>

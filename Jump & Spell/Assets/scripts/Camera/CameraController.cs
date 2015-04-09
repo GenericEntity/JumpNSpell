@@ -64,11 +64,11 @@ public class CameraController : MonoBehaviour
 			x = Mathf.Lerp(
 				x,
 				newPosition.x,
-				Time.deltaTime * zoomSpeed);
+				Time.deltaTime * moveSpeed);
 			y = Mathf.Lerp(
 				y,
 				newPosition.y,
-				Time.deltaTime * zoomSpeed);
+				Time.deltaTime * moveSpeed);
 		}
 
 		if(IsZooming)

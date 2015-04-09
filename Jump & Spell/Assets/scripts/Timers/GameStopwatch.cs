@@ -10,6 +10,8 @@ public class GameStopwatch : MonoBehaviour
 	private long secondsLived = 0;
 	public long goalInSeconds = 240;
 
+	private byte tenthOfSecCount;
+
 	void Awake()
 	{
 		controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController_JnS>();
@@ -31,26 +33,35 @@ public class GameStopwatch : MonoBehaviour
 			goalInSeconds,
 			0F);
 
+		tenthOfSecCount = 0;
+
 		// Start stopwatch
-		InvokeRepeating("CountUp", 1.0F, 1.0F);
+		InvokeRepeating("CountUp", 0.1F, 0.1F);
 	}
 
 	void CountUp()
 	{
-		// Tick
-		++secondsLived;
+		++tenthOfSecCount;
 
-		// Update number display
-		uiManager.TimeGoalText = string.Format("{0:D2}:{1:D2}", secondsLived / 60, secondsLived % 60);
-
-		// Adjust slider
-		uiManager.TimeGoalSliderValue = secondsLived;
-
-		// Check for goal
-		if(secondsLived == goalInSeconds)
+		if (tenthOfSecCount % 10 == 0)
 		{
-			CancelInvoke("CountUp");
-			controller.OpenExit();
+			// Tick
+			++secondsLived;
+
+			// Update number display
+			uiManager.TimeGoalText = string.Format("{0:D2}:{1:D2}", secondsLived / 60, secondsLived % 60);
+
+			// Adjust slider
+			uiManager.TimeGoalSliderValue = secondsLived;
+
+			// Check for goal
+			if (secondsLived == goalInSeconds)
+			{
+				CancelInvoke("CountUp");
+				controller.OpenExit();
+			}
+
+			tenthOfSecCount = 0;
 		}
 	}
 
@@ -60,5 +71,10 @@ public class GameStopwatch : MonoBehaviour
 	public void Stop()
 	{
 		CancelInvoke("CountUp");
+	}
+
+	public void Resume()
+	{
+		InvokeRepeating("CountUp", 0.1F, 0.1F);
 	}
 }

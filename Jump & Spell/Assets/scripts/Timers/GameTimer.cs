@@ -11,6 +11,7 @@ public class GameTimer : MonoBehaviour
 	public long startingSeconds = 90;
 	private long secondsRemaining;
 	private bool gameOver = false;
+	private byte tenthOfSecCount;
 
 	void Awake()
 	{
@@ -39,25 +40,34 @@ public class GameTimer : MonoBehaviour
 			maxSeconds, 
 			secondsRemaining);
 
+		tenthOfSecCount = 0;
+
 		// Start countdown
-		InvokeRepeating("TickDown", 1.0F, 1.0F);
+		InvokeRepeating("TickDown", 0.1F, 0.1F);
 	}
 
 	void TickDown()
 	{
-		// Tick down
-		--secondsRemaining;
+		++tenthOfSecCount;
 
-		// Update number display
-		uiManager.TimeLeftText = string.Format("{0:D2}:{1:D2}", secondsRemaining / 60, secondsRemaining % 60);
-
-		// Update slider
-		uiManager.TimeLeftSliderValue = secondsRemaining;
-
-		// CHeck for timeout
-		if(secondsRemaining == 0)
+		if (tenthOfSecCount % 10 == 0)
 		{
-			KillPlayer();
+			// Tick down
+			--secondsRemaining;
+
+			// Update number display
+			uiManager.TimeLeftText = string.Format("{0:D2}:{1:D2}", secondsRemaining / 60, secondsRemaining % 60);
+
+			// Update slider
+			uiManager.TimeLeftSliderValue = secondsRemaining;
+
+			// CHeck for timeout
+			if (secondsRemaining == 0)
+			{
+				KillPlayer();
+			}
+
+			tenthOfSecCount = 0;
 		}
 	}
 
@@ -108,5 +118,10 @@ public class GameTimer : MonoBehaviour
 	public void Stop()
 	{
 		CancelInvoke("TickDown");
+	}
+
+	public void Resume()
+	{
+		InvokeRepeating("TickDown", 0.1F, 0.1F);
 	}
 }

@@ -25,6 +25,10 @@ public class UIManager_JnS : MonoBehaviour
 	private Text timeLeftNumberDisplay;
 	[SerializeField]
 	private Slider timeLeftSlider;
+	[SerializeField]
+	private GameObject messagePanel;
+	[SerializeField]
+	private Text messageDisplay;
 
 	public string StatusText
 	{
@@ -125,6 +129,23 @@ public class UIManager_JnS : MonoBehaviour
 		}
 	}
 
+	public bool DisplayMessagePanel
+	{
+		get { return messagePanel.activeInHierarchy; }
+		set { messagePanel.SetActive(value); }
+	}
+
+	public string MessageDisplayText
+	{
+		get { return messageDisplay.text; }
+		set { messageDisplay.text = value; }
+	}
+
+	public Color MessageDisplayTextColor
+	{
+		get { return messageDisplay.color; }
+		set { messageDisplay.color = value; }
+	}
 
 
 	void Start()

@@ -53,12 +53,7 @@ public class WordManager_JnS : MonoBehaviour
 		int spawnCount = lManager.SpawnPointCount;
 
 		// Validate max word length
-		if (maxWordLength == null)
-		{
-			maxWordLength = Mathf.Min(spawnCount, longest);
-			Debug.Log(string.Format("No max word length was input. Value has defaulted to {0}", maxWordLength));
-		}
-		else if (maxWordLength > spawnCount ||
+		if (maxWordLength > spawnCount ||
 			maxWordLength > longest)
 		{
 			maxWordLength = Mathf.Min(spawnCount, longest);
@@ -92,7 +87,7 @@ public class WordManager_JnS : MonoBehaviour
 			controller.UpdateScore(GameController_JnS.ScoreEvent.CompletedWord, goal.Length);
 			controller.AddTime(GameController_JnS.ScoreEvent.CompletedWord);
 
-			StartCoroutine("CycleWord");
+			StartCoroutine(CycleWord());
 		}
 		else if (!isRightLetter)
 		{
@@ -104,7 +99,7 @@ public class WordManager_JnS : MonoBehaviour
 			controller.UpdateScore(GameController_JnS.ScoreEvent.WrongLetter);
 			controller.AddTime(GameController_JnS.ScoreEvent.WrongLetter);
 
-			StartCoroutine("CycleWord");
+			StartCoroutine(CycleWord());
 		}
 		else
 		{
