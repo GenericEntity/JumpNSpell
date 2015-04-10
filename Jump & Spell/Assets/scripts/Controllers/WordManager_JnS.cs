@@ -20,12 +20,17 @@ public class WordManager_JnS : MonoBehaviour
 	public int respawnDuration = 3;
 	public int maxWordLength;
 
+	private int secondsRemaining = 0;
+	private byte tenthOfSecCount = 0;
+	
+
 	void Awake()
 	{
 		letters = new List<char>();
 		controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController_JnS>();
 		uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager_JnS>();
 		lManager = GameObject.FindGameObjectWithTag("LetterManager").GetComponent<LetterManager_JnS>();
+		tenthOfSecCount = 0;
 	}
 
 	void Start()
@@ -87,7 +92,7 @@ public class WordManager_JnS : MonoBehaviour
 			controller.UpdateScore(GameController_JnS.ScoreEvent.CompletedWord, goal.Length);
 			controller.AddTime(GameController_JnS.ScoreEvent.CompletedWord);
 
-			StartCoroutine(CycleWord());
+			CycleWord();
 		}
 		else if (!isRightLetter)
 		{
@@ -99,7 +104,7 @@ public class WordManager_JnS : MonoBehaviour
 			controller.UpdateScore(GameController_JnS.ScoreEvent.WrongLetter);
 			controller.AddTime(GameController_JnS.ScoreEvent.WrongLetter);
 
-			StartCoroutine(CycleWord());
+			CycleWord();
 		}
 		else
 		{
@@ -138,23 +143,6 @@ public class WordManager_JnS : MonoBehaviour
 		return true;
 	}
 
-	private IEnumerator CycleWord()
-	{
-		// Delete all letters in the list
-		letters.Clear();
-		lManager.ClearAllLetters();
-
-		// Wait a certain amount of time before creating the new word
-		for (int i = respawnDuration; i > 0; --i)
-		{
-			uiManager.ProgressText = "New word in " + i;
-			yield return new WaitForSeconds(1);
-		}
-
-		uiManager.StatusText = string.Empty;
-		GetNextWordGoal();
-	}
-
 	private void GetNextWordGoal()
 	{
 		// Randomly select a new word
@@ -176,5 +164,53 @@ public class WordManager_JnS : MonoBehaviour
 
 		// Spawn letters
 		lManager.SpawnNewLetters(goal);
+	}
+
+	private void CycleWord()
+	{
+		// Delete all letters in the list
+		letters.Clear();
+		lManager.ClearAllLetters();
+
+		this.secondsRemaining = respawnDuration;
+		uiManager.ProgressText = string.Format("New word in {0}", this.secondsRemaining);
+		InvokeRepeating("RespawnTickDown", 0.1F, 0.1F);
+	}
+
+	private void RespawnTickDown()
+	{
+		++tenthOfSecCount;
+		if (tenthOfSecCount % 10 == 0)
+		{
+			tenthOfSecCount = 0;
+			--secondsRemaining;
+
+			if (secondsRemaining < 0)
+			{
+				secondsRemaining = 0;
+				CancelInvoke("RespawnTickDown");
+				Debug.Log("invalid resuming");
+				return;
+			}
+
+			uiManager.ProgressText = string.Format("New word in {0}", secondsRemaining);
+
+			if (secondsRemaining == 0)
+			{
+				uiManager.StatusText = string.Empty;
+				Debug.Log("Spawning");
+				GetNextWordGoal();
+			}
+		}
+	}
+
+	public void PauseSpawning()
+	{
+		CancelInvoke("RespawnTickDown");
+	}
+
+	public void ResumeSpawning()
+	{
+		InvokeRepeating("RespawnTickDown", 0.1F, 0.1F);
 	}
 }

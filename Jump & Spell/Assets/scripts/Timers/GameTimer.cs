@@ -52,8 +52,17 @@ public class GameTimer : MonoBehaviour
 
 		if (tenthOfSecCount % 10 == 0)
 		{
+			tenthOfSecCount = 0;
 			// Tick down
 			--secondsRemaining;
+
+			if(secondsRemaining < 0)
+			{
+				secondsRemaining = 0;
+				CancelInvoke("TickDown");
+				Debug.Log("Handled invalid tickdown");
+				return;
+			}
 
 			// Update number display
 			uiManager.TimeLeftText = string.Format("{0:D2}:{1:D2}", secondsRemaining / 60, secondsRemaining % 60);
@@ -66,8 +75,6 @@ public class GameTimer : MonoBehaviour
 			{
 				KillPlayer();
 			}
-
-			tenthOfSecCount = 0;
 		}
 	}
 
@@ -124,4 +131,6 @@ public class GameTimer : MonoBehaviour
 	{
 		InvokeRepeating("TickDown", 0.1F, 0.1F);
 	}
+
+
 }

@@ -57,6 +57,7 @@
      <Compile Include="Assets\scripts\Items\LetterPickup_JnS.cs" />
      <Compile Include="Assets\scripts\Items\LevelExit_JnS.cs" />
      <Compile Include="Assets\scripts\Levels\Tutorial1.cs" />
+     <Compile Include="Assets\scripts\MainMenu\MainMenu_JnS.cs" />
      <Compile Include="Assets\scripts\Player\PlayerBounds.cs" />
      <Compile Include="Assets\scripts\Player\PlayerController.cs" />
      <Compile Include="Assets\scripts\Timers\GameStopwatch.cs" />

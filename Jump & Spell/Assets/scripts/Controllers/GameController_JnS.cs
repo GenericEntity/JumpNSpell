@@ -13,6 +13,13 @@ public class GameController_JnS : MonoBehaviour
 		CorrectLetter,
 		CompletedWord
 	}
+	public enum GameState
+	{
+		DisplayingMessages,
+		Paused,
+		Playing,
+		Over
+	}
 
 	[SerializeField]
 	private GameTimer deathTimer;
@@ -24,6 +31,7 @@ public class GameController_JnS : MonoBehaviour
 	private PlayerController player;
 	private UIManager_JnS uiManager;
 	private LetterManager_JnS letterManager;
+	private WordManager_JnS wordManager;
 
 	[SerializeField]
 	private int letterScore = 10;
@@ -36,7 +44,12 @@ public class GameController_JnS : MonoBehaviour
 	[SerializeField]
 	private int wordTime = 30;
 
-	private bool gameIsOver;
+	private GameState state;
+	public GameState State
+	{
+		get { return state; }
+		set { state = value; }
+	}
 	private int scoreAtStart;
 
 	void Awake()
@@ -45,13 +58,10 @@ public class GameController_JnS : MonoBehaviour
 		uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager_JnS>();
 		letterManager = GameObject.FindGameObjectWithTag("LetterManager").GetComponent<LetterManager_JnS>();
 		sceneCam = GameObject.FindGameObjectWithTag("MainCamera");
+		wordManager = GameObject.FindGameObjectWithTag("Player").GetComponent<WordManager_JnS>();
 
 		scoreAtStart = GameData.dataHolder.score;
-	}
-
-	void Start()
-	{
-		gameIsOver = false;
+		state = GameState.Playing;
 	}
 
 // Time-affecting
@@ -86,16 +96,21 @@ public class GameController_JnS : MonoBehaviour
 // Player Control
 	public void PauseGame()
 	{
+		if (state != GameState.DisplayingMessages)
+			state = GameState.Paused;
 		DisablePlayerControl();
 		deathTimer.Stop();
 		rescueTimer.Stop();
+		wordManager.PauseSpawning();
 	}
 
 	public void UnpauseGame()
 	{
+		state = GameState.Playing;
 		EnablePlayerControl();
 		deathTimer.Resume();
 		rescueTimer.Resume();
+		wordManager.ResumeSpawning();
 	}
 
 	public void DisablePlayerControl()
@@ -118,7 +133,7 @@ public class GameController_JnS : MonoBehaviour
 	/// <param name="isEnabled">true to enable, false to disable</param>
 	public void TogglePlayerMovement(bool isEnabled)
 	{
-		if(!gameIsOver && 
+		if(( state != GameController_JnS.GameState.Over )&& 
 			player.enabled != isEnabled)
 		{
 			player.enabled = isEnabled;
@@ -148,7 +163,7 @@ public class GameController_JnS : MonoBehaviour
 
 	private void ExecuteGameOverProcedure()
 	{
-		gameIsOver = true;
+		state = GameController_JnS.GameState.Over;
 		DisablePlayerControl();
 		letterManager.DisableLetterPickup();
 		rescueTimer.Stop();
@@ -209,6 +224,21 @@ public class GameController_JnS : MonoBehaviour
 				break;
 
 			default: throw new NotImplementedException("A score action case is being called but has not been implemented.");
+		}
+	}
+
+
+
+
+	void Update()
+	{
+		if(Input.GetKeyDown("p"))
+		{
+			PauseGame();
+		}
+		else if(Input.GetKeyUp("p"))
+		{
+			UnpauseGame();
 		}
 	}
 }

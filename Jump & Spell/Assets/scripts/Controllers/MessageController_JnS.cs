@@ -64,6 +64,7 @@ public class MessageController_JnS : MonoBehaviour
 			messages.Length == 0)
 			return;
 
+		controller.State = GameController_JnS.GameState.DisplayingMessages;
 		controller.PauseGame();
 		// Allow message advancement
 		isDisplayingMessages = true;
@@ -93,6 +94,7 @@ public class MessageController_JnS : MonoBehaviour
 		isDisplayingMessages = false;
 
 		controller.UnpauseGame();
+		controller.State = GameController_JnS.GameState.Playing;
 	}
 
 	private void SkipText()

@@ -45,8 +45,17 @@ public class GameStopwatch : MonoBehaviour
 
 		if (tenthOfSecCount % 10 == 0)
 		{
+			tenthOfSecCount = 0;
 			// Tick
 			++secondsLived;
+
+			if(secondsLived > goalInSeconds)
+			{
+				secondsLived = goalInSeconds;
+				CancelInvoke("CountUp");
+				Debug.Log("Handled invalid countup");
+				return;
+			}
 
 			// Update number display
 			uiManager.TimeGoalText = string.Format("{0:D2}:{1:D2}", secondsLived / 60, secondsLived % 60);
@@ -61,7 +70,7 @@ public class GameStopwatch : MonoBehaviour
 				controller.OpenExit();
 			}
 
-			tenthOfSecCount = 0;
+			
 		}
 	}
 
