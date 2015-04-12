@@ -36,7 +36,7 @@ public class MessageController_JnS : MonoBehaviour
 				SkipText();
 				uiManager.MessageDisplayText = currMessage;
 			}
-			else if(index >= messageSequence.Length - 1)
+			else if(index >= messageSequence.Length)
 			{
 				EndMessageSequence();
 			}
@@ -88,6 +88,7 @@ public class MessageController_JnS : MonoBehaviour
 	{
 		// Make panel invisible
 		uiManager.DisplayMessagePanel = false;
+		uiManager.EnableHUD(true);
 		// Reset panel text
 		uiManager.MessageDisplayText = string.Empty;
 		// Disallow message advancement

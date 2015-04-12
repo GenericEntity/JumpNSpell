@@ -8,15 +8,21 @@ using System;
 public class UIManager_JnS : MonoBehaviour
 {
 	[SerializeField]
+	private GameObject statusPanel;
+	[SerializeField]
 	private Text statusDisplay;
 	[SerializeField]
 	private Text progressDisplay;
+	[SerializeField]
+	private GameObject scorePanel;
 	[SerializeField]
 	private Text scoreDisplay;
 	[SerializeField]
 	private GameObject levelLostPanel;
 	[SerializeField]
 	private GameObject levelWonPanel;
+	[SerializeField]
+	private GameObject timerPanel;
 	[SerializeField]
 	private Text timeGoalNumberDisplay;
 	[SerializeField]
@@ -29,6 +35,15 @@ public class UIManager_JnS : MonoBehaviour
 	private GameObject messagePanel;
 	[SerializeField]
 	private Text messageDisplay;
+
+	[SerializeField]
+	private GameObject levelCover;
+
+	public bool DisplayStatusPanel
+	{
+		get { return statusPanel.activeInHierarchy; }
+		set { statusPanel.SetActive(value); }
+	}
 
 	public string StatusText
 	{
@@ -52,6 +67,12 @@ public class UIManager_JnS : MonoBehaviour
 		set { progressDisplay.color = value; }
 	}
 
+	public bool DisplayScorePanel
+	{
+		get { return scorePanel.activeInHierarchy; }
+		set { scorePanel.SetActive(value); }
+	}
+
 	public string ScoreText
 	{
 		set { scoreDisplay.text = value; }
@@ -73,6 +94,12 @@ public class UIManager_JnS : MonoBehaviour
 	{
 		get { return levelWonPanel.activeInHierarchy; }
 		set { levelWonPanel.SetActive(value); }
+	}
+
+	public bool DisplayTimerPanel
+	{
+		get { return timerPanel.activeInHierarchy; }
+		set { timerPanel.SetActive(value); }
 	}
 
 	public string TimeGoalText
@@ -147,12 +174,26 @@ public class UIManager_JnS : MonoBehaviour
 		set { messageDisplay.color = value; }
 	}
 
+	public bool CoverLevel
+	{
+		get { return levelCover.activeInHierarchy; }
+		set { levelCover.SetActive(value); }
+	}
 
 	void Start()
 	{
 		this.DisplayLevelLostPanel = false;
 		this.DisplayLevelWonPanel = false;
 		this.ScoreText = string.Format("Score: {0}", GameData.dataHolder.score);
+	}
+
+	public void EnableHUD(bool enabled, bool coverLevel = false)
+	{
+		DisplayStatusPanel = enabled;
+		DisplayScorePanel = enabled;
+		DisplayTimerPanel = enabled;
+
+		CoverLevel = coverLevel;
 	}
 
 	/// <summary>
@@ -179,5 +220,4 @@ public class UIManager_JnS : MonoBehaviour
 		timeLeftSlider.maxValue = maxValue;
 		timeLeftSlider.value = initialValue;
 	}
-
 }
