@@ -12,6 +12,11 @@ public class MessageController_JnS : MonoBehaviour
 	private bool isTyping;
 	private string currMessage;
 
+	public bool DisplayingMessages
+	{
+		get { return isDisplayingMessages; }
+	}
+
 	[SerializeField]
 	private float letterPause = 0.04f;
 	//public AudioClip sound;
@@ -28,7 +33,7 @@ public class MessageController_JnS : MonoBehaviour
 
 	void Update()
 	{
-		if(isDisplayingMessages && Input.GetButtonDown("NextDialog"))
+		if(isDisplayingMessages && Input.GetKeyDown("f"))
 		{
 			Debug.Log("NextDialog registered");
 			if(isTyping)
@@ -45,6 +50,11 @@ public class MessageController_JnS : MonoBehaviour
 				StartNextMessage(messageSequence[index]);
 				++index;
 			}
+		}
+		else if(isDisplayingMessages && Input.GetKeyDown("space"))
+		{
+			SkipText();
+			EndMessageSequence();
 		}
 	}
 
@@ -88,7 +98,6 @@ public class MessageController_JnS : MonoBehaviour
 	{
 		// Make panel invisible
 		uiManager.DisplayMessagePanel = false;
-		uiManager.EnableHUD(true);
 		// Reset panel text
 		uiManager.MessageDisplayText = string.Empty;
 		// Disallow message advancement

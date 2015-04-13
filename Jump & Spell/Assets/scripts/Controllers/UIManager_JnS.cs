@@ -22,11 +22,13 @@ public class UIManager_JnS : MonoBehaviour
 	[SerializeField]
 	private GameObject levelWonPanel;
 	[SerializeField]
-	private GameObject timerPanel;
+	private GameObject timeGoalPanel;
 	[SerializeField]
 	private Text timeGoalNumberDisplay;
 	[SerializeField]
 	private Slider timeGoalSlider;
+	[SerializeField]
+	private GameObject timeLeftPanel;
 	[SerializeField]
 	private Text timeLeftNumberDisplay;
 	[SerializeField]
@@ -96,10 +98,10 @@ public class UIManager_JnS : MonoBehaviour
 		set { levelWonPanel.SetActive(value); }
 	}
 
-	public bool DisplayTimerPanel
+	public bool DisplayTimeGoalPanel
 	{
-		get { return timerPanel.activeInHierarchy; }
-		set { timerPanel.SetActive(value); }
+		get { return timeGoalPanel.activeInHierarchy; }
+		set { timeGoalPanel.SetActive(value); }
 	}
 
 	public string TimeGoalText
@@ -127,6 +129,12 @@ public class UIManager_JnS : MonoBehaviour
 					timeGoalSlider.minValue,
 					timeGoalSlider.maxValue));
 		}
+	}
+
+	public bool DisplayTimeLeftPanel
+	{
+		get { return timeLeftPanel.activeInHierarchy; }
+		set { timeLeftPanel.SetActive(value); }
 	}
 
 	public string TimeLeftText
@@ -191,7 +199,8 @@ public class UIManager_JnS : MonoBehaviour
 	{
 		DisplayStatusPanel = enabled;
 		DisplayScorePanel = enabled;
-		DisplayTimerPanel = enabled;
+		DisplayTimeGoalPanel = enabled;
+		DisplayTimeLeftPanel = enabled;
 
 		CoverLevel = coverLevel;
 	}
