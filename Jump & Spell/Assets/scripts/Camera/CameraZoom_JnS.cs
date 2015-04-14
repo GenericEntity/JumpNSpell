@@ -34,6 +34,7 @@ public class CameraZoom_JnS : MonoBehaviour
 		if (Input.GetButtonDown("ZoomCam"))
 		{
 			Debug.Log("ZoomOut");
+			controller.canPause = false; 
 
 			float newOrthSize;
 
@@ -51,17 +52,20 @@ public class CameraZoom_JnS : MonoBehaviour
 			camController.Zoom(newOrthSize, zoomSpeed, true);
 			camController.MoveCamera(levelViewArea.transform.position, zoomSpeed, true);
 
-			controller.TogglePlayerMovement(false);
+			controller.EnableMovementIfValid(false);
 
 			lManager.InflateLetterSprites(newOrthSize / originalOrthSize);
 		}
 		else if (Input.GetButtonUp("ZoomCam"))
 		{
 			Debug.Log("ZoomIn");
+			controller.canPause = true;
 			camController.Zoom(originalOrthSize, zoomSpeed, true);
 			camController.IsFollowing = true;
-			controller.TogglePlayerMovement(true);
+			controller.EnableMovementIfValid(true);
 			lManager.DeflateLetterSprites();
 		}
+
+
 	}
 }

@@ -4,10 +4,7 @@ using System.Collections;
 public class Tutorial1 : MonoBehaviour
 {
 	private MessageController_JnS msgController;
-	private GameController_JnS controller;
 	private UIManager_JnS ui;
-	[SerializeField]
-	private GameObject levelCover;
 
 	bool run;
 	int counter;
@@ -79,17 +76,12 @@ public class Tutorial1 : MonoBehaviour
 		counter = 0;
 	}
 
-	void Start()
-	{
-		ui.EnableHUD(false, true);
-	}
-
 	void Update()
 	{
 		if (run)
 		{
 			if (!ui.CoverLevel &&
-				Input.GetKeyDown("space"))
+				Input.GetKeyDown(KeyCode.Space))
 			{
 				ui.EnableHUD(true);
 				run = false;
@@ -101,32 +93,42 @@ public class Tutorial1 : MonoBehaviour
 				switch(counter)
 				{
 					case 0:
-						msgController.StartMessageSequence(introMessage);
+						ui.CoverLevel = true;
+						msgController.StartMessageSequence(introMessage,
+							MessageController_JnS.MessageType.Beginning,
+							MessageController_JnS.MessageOptions.Do,
+							MessageController_JnS.MessageOptions.DoOpposite);
 						++counter;
 						break;
 					case 1:
-						msgController.StartMessageSequence(tutMsg1);
 						ui.CoverLevel = false;
+						ui.EnableHUD(false);
+						msgController.StartMessageSequence(tutMsg1, 
+							MessageController_JnS.MessageType.Beginning);
 						++counter;
 						break;
 					case 2:
 						ui.DisplayScorePanel = true;
-						msgController.StartMessageSequence(tutMsg2);
+						msgController.StartMessageSequence(tutMsg2,
+							MessageController_JnS.MessageType.Beginning);
 						++counter;
 						break;
 					case 3:
 						ui.DisplayStatusPanel = true;
-						msgController.StartMessageSequence(tutMsg3);
+						msgController.StartMessageSequence(tutMsg3,
+							MessageController_JnS.MessageType.Beginning);
 						++counter;
 						break;
 					case 4:
 						ui.DisplayTimeLeftPanel = true;
-						msgController.StartMessageSequence(tutMsg4);
+						msgController.StartMessageSequence(tutMsg4,
+							MessageController_JnS.MessageType.Beginning);
 						++counter;
 						break;
 					case 5:
 						ui.DisplayTimeGoalPanel = true;
-						msgController.StartMessageSequence(tutMsg5);
+						msgController.StartMessageSequence(tutMsg5,
+							MessageController_JnS.MessageType.Beginning);
 						++counter;
 						run = false;
 						break;

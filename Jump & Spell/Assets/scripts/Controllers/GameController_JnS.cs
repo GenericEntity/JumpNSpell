@@ -15,10 +15,10 @@ public class GameController_JnS : MonoBehaviour
 	}
 	public enum GameState
 	{
-		DisplayingMessages,
-		Paused,
 		Playing,
-		Over
+		Paused,
+		Over,
+		DisplayingMessages
 	}
 
 	[SerializeField]
@@ -30,7 +30,6 @@ public class GameController_JnS : MonoBehaviour
 	private GameObject sceneCam;
 	private PlayerController player;
 	private UIManager_JnS uiManager;
-	private LetterManager_JnS letterManager;
 	private WordManager_JnS wordManager;
 
 	[SerializeField]
@@ -42,26 +41,40 @@ public class GameController_JnS : MonoBehaviour
 	[SerializeField]
 	private int correctLetterTime = 5;
 	[SerializeField]
-	private int wordTime = 30;
+	private int wordTimePerLetter = 5;
 
-	private GameState state;
-	public GameState State
-	{
-		get { return state; }
-		set { state = value; }
-	}
+	public GameState State { get; set; }
+
+	public bool HasWon { get; set; }
+
 	private int scoreAtStart;
+
+	public bool canPause { get; set; }
+	private bool isPaused;
 
 	void Awake()
 	{
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 		uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager_JnS>();
-		letterManager = GameObject.FindGameObjectWithTag("LetterManager").GetComponent<LetterManager_JnS>();
 		sceneCam = GameObject.FindGameObjectWithTag("MainCamera");
 		wordManager = GameObject.FindGameObjectWithTag("Player").GetComponent<WordManager_JnS>();
 
+		canPause = true;
+		HasWon = false;
+		State = GameState.Playing;
+	}
+	
+	void Start()
+	{
 		scoreAtStart = GameData.dataHolder.score;
-		state = GameState.Playing;
+		ForceEnableAllTimers(true);
+		ForceEnableAllControls(true);
+		levelExit.SetActive(false);
+		uiManager.DisplayLevelLostPanel = false;
+		uiManager.DisplayLevelWonPanel = false;
+		uiManager.EnableHUD(true);
+		uiManager.CoverLevel = false;
+		uiManager.DisplayGameMenu = false;
 	}
 
 // Time-affecting
@@ -69,7 +82,7 @@ public class GameController_JnS : MonoBehaviour
 	/// Adds theinput number of seconds to the time remaining on the GameTimer.
 	/// </summary>
 	/// <param name="seconds">The number of seconds to add</param>
-	public void AddTime(ScoreEvent scoreEv)
+	public void AddTime(ScoreEvent scoreEv, int goalLength = -1)
 	{
 		switch (scoreEv)
 		{
@@ -78,7 +91,7 @@ public class GameController_JnS : MonoBehaviour
 				break;
 
 			case ScoreEvent.CompletedWord:
-				deathTimer.IncreaseTimeRemaining(wordTime);
+				deathTimer.IncreaseTimeRemaining(wordTimePerLetter * goalLength);
 				break;
 
 			case ScoreEvent.WrongLetter:
@@ -94,80 +107,69 @@ public class GameController_JnS : MonoBehaviour
 	}
 
 // Player Control
-	public void PauseGame()
+	public void EnableMovementIfValid(bool enable)
 	{
-		if (state != GameState.DisplayingMessages)
-			state = GameState.Paused;
-		DisablePlayerControl();
-		deathTimer.Stop();
-		rescueTimer.Stop();
-		wordManager.PauseSpawning();
+		if (State == GameState.Playing)
+			player.enabled = enable;
 	}
 
-	public void UnpauseGame()
+	public void ForceEnableAllTimers(bool enable)
 	{
-		state = GameState.Playing;
-		EnablePlayerControl();
-		deathTimer.Resume();
-		rescueTimer.Resume();
-		wordManager.ResumeSpawning();
-	}
-
-	public void DisablePlayerControl()
-	{
-		player.enabled = false;
-		sceneCam.GetComponent<CameraZoom_JnS>().enabled = false;
-		levelExit.GetComponent<LevelExit_JnS>().enabled = false;
-	}
-
-	public void EnablePlayerControl()
-	{
-		player.enabled = true;
-		sceneCam.GetComponent<CameraZoom_JnS>().enabled = true;
-		levelExit.GetComponent<LevelExit_JnS>().enabled = true;
-	}
-
-	/// <summary>
-	/// Enables or disables the player's controller script, if the player has not lost. Otherwise, does nothing.
-	/// </summary>
-	/// <param name="isEnabled">true to enable, false to disable</param>
-	public void TogglePlayerMovement(bool isEnabled)
-	{
-		if(( state != GameController_JnS.GameState.Over )&& 
-			player.enabled != isEnabled)
+		if(enable)
 		{
-			player.enabled = isEnabled;
+			deathTimer.Resume();
+			rescueTimer.Resume();
+			wordManager.PauseSpawning();
 		}
+		else
+		{
+			// Death timer
+			deathTimer.Stop();
+			// Rescue timer
+			rescueTimer.Stop();
+			// Letter respawn timer
+			wordManager.ResumeSpawning();
+		}
+
+	}
+
+	public void ForceEnableAllControls(bool enable)
+	{
+		// Movement
+		player.enabled = enable;
+		// Cam Zoom
+		sceneCam.GetComponent<CameraZoom_JnS>().enabled = enable;
+		// Exit level
+		levelExit.GetComponent<LevelExit_JnS>().enabled = enable;
+		// Pause
+		canPause = enable;
 	}
 
 // Win/Loss
 	public void KillPlayer()
 	{
-		Debug.Log("Player killed");
-		ExecuteGameOverProcedure();
+		GameOverProcedure();
+		HasWon = false;
 		uiManager.DisplayLevelLostPanel = true;
 	}
 
 	public void OpenExit()
 	{
-		Debug.Log("Exit opened");
 		levelExit.SetActive(true);
 	}
 
 	public void CongratulatePlayer()
 	{
-		Debug.Log("Player has won");
-		ExecuteGameOverProcedure();
+		GameOverProcedure();
+		HasWon = true;
 		uiManager.DisplayLevelWonPanel = true;
 	}
 
-	private void ExecuteGameOverProcedure()
+	private void GameOverProcedure()
 	{
-		state = GameController_JnS.GameState.Over;
-		DisablePlayerControl();
-		letterManager.DisableLetterPickup();
-		rescueTimer.Stop();
-		deathTimer.Stop();
+		State = GameState.Over;
+		ForceEnableAllControls(false);
+		ForceEnableAllTimers(false);
 	}
 
 // Level transition
@@ -180,6 +182,12 @@ public class GameController_JnS : MonoBehaviour
 	public void LoadNextLevel()
 	{
 		Application.LoadLevel(Application.loadedLevel + 1);
+	}
+
+	public void LoadMainMenu()
+	{
+		UnpauseGame();
+		Application.LoadLevel(0);
 	}
 
 
@@ -227,18 +235,43 @@ public class GameController_JnS : MonoBehaviour
 		}
 	}
 
+// Pause
+	public void PauseGame()
+	{
+		if(canPause)
+		{
+			Time.timeScale = 0F;
+			isPaused = true;
+			player.enabled = false;
+			sceneCam.GetComponent<CameraZoom_JnS>().enabled = false;
+			levelExit.GetComponent<LevelExit_JnS>().enabled = false;
+			uiManager.DisplayGameMenu = true;
+		}
+			
+	}
 
-
+	public void UnpauseGame()
+	{
+		if (canPause)
+		{
+			Time.timeScale = 1F;
+			isPaused = false;
+			player.enabled = true;
+			sceneCam.GetComponent<CameraZoom_JnS>().enabled = true;
+			levelExit.GetComponent<LevelExit_JnS>().enabled = true;
+			uiManager.DisplayGameMenu = false;
+		}
+			
+	}
 
 	void Update()
 	{
-		if(Input.GetKeyDown("p"))
+		if(Input.GetButtonDown("OpenMenu"))
 		{
-			PauseGame();
-		}
-		else if(Input.GetKeyUp("p"))
-		{
-			UnpauseGame();
+			if (isPaused)
+				UnpauseGame();
+			else
+				PauseGame();
 		}
 	}
 }

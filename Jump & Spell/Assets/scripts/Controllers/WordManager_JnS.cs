@@ -6,10 +6,8 @@ using System;
 
 public class WordManager_JnS : MonoBehaviour
 {
-	/*** TEST IMPLEMENTATION ***/
-	private string[] wordlist = { "first", "crackers", "practice", "light", "out", "balloon", "bought", "tonight", "sugar", "fierce", "halfway", "cupboard", "even" };
+	private string[] wordlist;
 	private List<string>[] wordLists;
-	/*** TEST IMPLEMENTATION ***/
 
 	private List<char> letters;
 	private string goal;
@@ -35,6 +33,8 @@ public class WordManager_JnS : MonoBehaviour
 
 	void Start()
 	{
+		this.wordlist = WordList.wordHolder.List;
+
 		// Find longest word
 		int longest = 0;
 		foreach (string word in wordlist)
@@ -90,7 +90,7 @@ public class WordManager_JnS : MonoBehaviour
 			uiManager.StatusText = "Word Complete!";
 
 			controller.UpdateScore(GameController_JnS.ScoreEvent.CompletedWord, goal.Length);
-			controller.AddTime(GameController_JnS.ScoreEvent.CompletedWord);
+			controller.AddTime(GameController_JnS.ScoreEvent.CompletedWord, goal.Length);
 
 			CycleWord();
 		}

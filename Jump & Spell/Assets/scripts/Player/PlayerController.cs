@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
 
 	void Update()
 	{
-		if(Input.GetKeyDown(KeyCode.Space) && grounded)
+		if(Input.GetButtonDown("jump") && grounded)
 			GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
 	}
 }

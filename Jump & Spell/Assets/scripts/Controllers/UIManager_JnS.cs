@@ -37,6 +37,8 @@ public class UIManager_JnS : MonoBehaviour
 	private GameObject messagePanel;
 	[SerializeField]
 	private Text messageDisplay;
+	[SerializeField]
+	private GameObject gameMenu;
 
 	[SerializeField]
 	private GameObject levelCover;
@@ -188,6 +190,12 @@ public class UIManager_JnS : MonoBehaviour
 		set { levelCover.SetActive(value); }
 	}
 
+	public bool DisplayGameMenu
+	{
+		get { return gameMenu.activeInHierarchy; }
+		set { gameMenu.SetActive(value); }
+	}
+
 	void Start()
 	{
 		this.DisplayLevelLostPanel = false;
@@ -195,14 +203,12 @@ public class UIManager_JnS : MonoBehaviour
 		this.ScoreText = string.Format("Score: {0}", GameData.dataHolder.score);
 	}
 
-	public void EnableHUD(bool enabled, bool coverLevel = false)
+	public void EnableHUD(bool enabled)
 	{
 		DisplayStatusPanel = enabled;
 		DisplayScorePanel = enabled;
 		DisplayTimeGoalPanel = enabled;
 		DisplayTimeLeftPanel = enabled;
-
-		CoverLevel = coverLevel;
 	}
 
 	/// <summary>

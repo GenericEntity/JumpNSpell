@@ -54,14 +54,17 @@
      <Compile Include="Assets\scripts\Controllers\UIManager_JnS.cs" />
      <Compile Include="Assets\scripts\Controllers\WordManager_JnS.cs" />
      <Compile Include="Assets\scripts\Game Data\GameData.cs" />
+     <Compile Include="Assets\scripts\Game Data\WordList.cs" />
      <Compile Include="Assets\scripts\Items\LetterPickup_JnS.cs" />
      <Compile Include="Assets\scripts\Items\LevelExit_JnS.cs" />
+     <Compile Include="Assets\scripts\Levels\Level1.cs" />
      <Compile Include="Assets\scripts\Levels\Tutorial1.cs" />
      <Compile Include="Assets\scripts\MainMenu\MainMenu_JnS.cs" />
      <Compile Include="Assets\scripts\Player\PlayerBounds.cs" />
      <Compile Include="Assets\scripts\Player\PlayerController.cs" />
      <Compile Include="Assets\scripts\Timers\GameStopwatch.cs" />
      <Compile Include="Assets\scripts\Timers\GameTimer.cs" />
+     <None Include="Assets\Resources\wordlist.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

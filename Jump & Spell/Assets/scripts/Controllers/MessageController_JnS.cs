@@ -3,6 +3,20 @@ using System;
 using System.Collections;
 public class MessageController_JnS : MonoBehaviour
 {
+	public enum MessageOptions
+	{
+		LeaveAlone,
+		Do,
+		DoOpposite
+	}
+
+	public enum MessageType
+	{
+		Beginning,
+		During,
+		Ending
+	}
+
 	private UIManager_JnS uiManager;
 	private GameController_JnS controller;
 
@@ -11,6 +25,11 @@ public class MessageController_JnS : MonoBehaviour
 	private bool isDisplayingMessages;
 	private bool isTyping;
 	private string currMessage;
+
+	private MessageType msgType;
+	private MessageOptions coverAfter;
+	private MessageOptions hudAfter;
+	private GameController_JnS.GameState prevState;
 
 	public bool DisplayingMessages
 	{
@@ -33,7 +52,7 @@ public class MessageController_JnS : MonoBehaviour
 
 	void Update()
 	{
-		if(isDisplayingMessages && Input.GetKeyDown("f"))
+		if(isDisplayingMessages && Input.GetKeyDown(KeyCode.F))
 		{
 			Debug.Log("NextDialog registered");
 			if(isTyping)
@@ -51,7 +70,7 @@ public class MessageController_JnS : MonoBehaviour
 				++index;
 			}
 		}
-		else if(isDisplayingMessages && Input.GetKeyDown("space"))
+		else if(isDisplayingMessages && Input.GetKeyDown(KeyCode.Space))
 		{
 			SkipText();
 			EndMessageSequence();
@@ -68,14 +87,37 @@ public class MessageController_JnS : MonoBehaviour
 		StartCoroutine("TypeText");
 	}
 
-	public void StartMessageSequence(string[] messages)
+	public void StartMessageSequence(string[] messages, 
+		MessageType type,
+		MessageOptions coverAfter = MessageOptions.LeaveAlone,
+		MessageOptions enableHudAfter = MessageOptions.LeaveAlone)
 	{
 		if (messages == null ||
 			messages.Length == 0)
 			return;
 
+		this.msgType = type;
+		this.coverAfter = coverAfter;
+		this.hudAfter = enableHudAfter;
+		this.prevState = controller.State;
 		controller.State = GameController_JnS.GameState.DisplayingMessages;
-		controller.PauseGame();
+
+		switch(msgType)
+		{
+			case MessageType.Beginning:
+				controller.ForceEnableAllTimers(false);
+				controller.ForceEnableAllControls(false);
+				break;
+			case MessageType.During:
+				controller.ForceEnableAllTimers(false);
+				controller.ForceEnableAllControls(false);				
+				break;
+			case MessageType.Ending:
+				uiManager.DisplayLevelLostPanel = false;
+				uiManager.DisplayLevelWonPanel = false;
+				break;
+		}
+
 		// Allow message advancement
 		isDisplayingMessages = true;
 		// Set the sequence
@@ -87,15 +129,29 @@ public class MessageController_JnS : MonoBehaviour
 		// Start first message
 		StartNextMessage(messageSequence[0]);
 	}
-
-	public void StartMessageSequence(string[] messages, Color textColor)
-	{
-		uiManager.MessageDisplayTextColor = textColor;
-		StartMessageSequence(messages);
-	}
-
+	
 	private void EndMessageSequence()
 	{
+		switch (this.coverAfter)
+		{
+			case MessageOptions.Do:
+				uiManager.CoverLevel = true;
+				break;
+			case MessageOptions.DoOpposite:
+				uiManager.CoverLevel = false;
+				break;
+		}
+
+		switch (this.hudAfter)
+		{
+			case MessageOptions.Do:
+				uiManager.EnableHUD(true);
+				break;
+			case MessageOptions.DoOpposite:
+				uiManager.EnableHUD(false);
+				break;
+		}
+
 		// Make panel invisible
 		uiManager.DisplayMessagePanel = false;
 		// Reset panel text
@@ -103,8 +159,37 @@ public class MessageController_JnS : MonoBehaviour
 		// Disallow message advancement
 		isDisplayingMessages = false;
 
-		controller.UnpauseGame();
-		controller.State = GameController_JnS.GameState.Playing;
+		switch(msgType)
+		{
+			case MessageType.Beginning:
+				controller.ForceEnableAllTimers(true);
+				controller.ForceEnableAllControls(true);
+				break;
+
+			case MessageType.During:
+				switch(this.prevState)
+				{
+					case GameController_JnS.GameState.Playing:
+						controller.ForceEnableAllTimers(true);
+						controller.ForceEnableAllControls(true);
+						break;
+
+					case GameController_JnS.GameState.Over:
+						break;
+
+					default: throw new Exception();
+				}
+				break;
+
+			case MessageType.Ending:
+				if (controller.HasWon)
+					uiManager.DisplayLevelWonPanel = true;
+				else
+					uiManager.DisplayLevelLostPanel = true;
+				break;
+		}
+
+		controller.State = prevState;
 	}
 
 	private void SkipText()
