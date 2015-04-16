@@ -46,7 +46,8 @@ public class Level1 : MonoBehaviour
 		}
 
 		if(run1 &&
-			controller.State == GameController_JnS.GameState.Over)
+			controller.State == GameController_JnS.GameState.Over
+			&& controller.HasWon)
 		{
 			ui.CoverLevel = true;
 			messageController.StartMessageSequence(winMessages,

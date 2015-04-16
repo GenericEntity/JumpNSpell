@@ -60,6 +60,12 @@
      <Compile Include="Assets\scripts\Levels\Level1.cs" />
      <Compile Include="Assets\scripts\Levels\Tutorial1.cs" />
      <Compile Include="Assets\scripts\MainMenu\MainMenu_JnS.cs" />
+     <Compile Include="Assets\scripts\Moving Platforms\FollowPath.cs" />
+     <Compile Include="Assets\scripts\Moving Platforms\PathDefinition.cs" />
+     <Compile Include="Assets\scripts\Player\CharacterController2D.cs" />
+     <Compile Include="Assets\scripts\Player\ControllerParameters2D.cs" />
+     <Compile Include="Assets\scripts\Player\ControllerState2D.cs" />
+     <Compile Include="Assets\scripts\Player\Player.cs" />
      <Compile Include="Assets\scripts\Player\PlayerBounds.cs" />
      <Compile Include="Assets\scripts\Player\PlayerController.cs" />
      <Compile Include="Assets\scripts\Timers\GameStopwatch.cs" />
