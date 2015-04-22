@@ -26,7 +26,7 @@ public class LevelExit_JnS : MonoBehaviour
 
 	public void OnTriggerEnter2D(Collider2D other)
 	{
-		var player = other.GetComponent<PlayerController>();
+		var player = other.GetComponent<Player>();
 		if (player == null)
 			return;
 
@@ -35,7 +35,7 @@ public class LevelExit_JnS : MonoBehaviour
 
 	void OnTriggerExit2D(Collider2D other)
 	{
-		var player = other.GetComponent<PlayerController>();
+		var player = other.GetComponent<Player>();
 		if (player == null)
 			return;
 

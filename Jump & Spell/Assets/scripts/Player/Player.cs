@@ -3,71 +3,65 @@ using System.Collections;
 
 public class Player : MonoBehaviour
 {
-	private bool isFacingRight;
-	private CharacterController2D controller;
-	private float normalizedHorizontalSpeed; // -1 if moving left, 1 if moving right
+	private bool _isFacingRight;
+	private CharacterController2D _controller;
+	private float _normalizedHorizontalSpeed;
 
-	public float maxSpeed = 8F; // maximum units/s that player can move
-	// How quickly player's velocity changes
-	public float speedAccelerationOnGround = 10F;
-	public float speedAccelerationInAir = 5F;
+	public float MaxSpeed = 8F;
+	public float SpeedAccelerationOnGround = 10F;
+	public float SpeedAccelerationInAir = 5F;
 
 	public void Start()
 	{
-		controller = GetComponent<CharacterController2D>();
-		isFacingRight = transform.localScale.x > 0F; // transform.localScale will be negative if the character is flipped (facing left). Otherwise, it will be positive
+		_controller = GetComponent<CharacterController2D>();
+		_isFacingRight = transform.localScale.x > 0F;
 	}
 
 	public void Update()
 	{
-		// 1. Handle input
 		HandleInput();
 
-		// 2. Update controller's force
-		var movementFactor = controller.State.IsGrounded ? speedAccelerationOnGround : speedAccelerationInAir;
-		controller.SetHorizontalForce(Mathf.Lerp(
-			controller.Velocity.x, 
-			normalizedHorizontalSpeed * maxSpeed, 
+		var movementFactor = _controller.State.IsGrounded ? SpeedAccelerationOnGround : SpeedAccelerationInAir;
+		_controller.SetHorizontalForce(Mathf.Lerp(
+			_controller.Velocity.x, 
+			_normalizedHorizontalSpeed * MaxSpeed, 
 			Time.deltaTime * movementFactor));
+
 
 	}
 
-	/// <summary>
-	/// Sets normalizedHorizontalSpeed to 1, -1 or 0 based on user input.
-	/// </summary>
 	private void HandleInput()
 	{
 		if(Input.GetKey(KeyCode.D))
 		{
-			normalizedHorizontalSpeed = 1F;
-			if (!isFacingRight)
+			_normalizedHorizontalSpeed = 1F;
+			if (!_isFacingRight)
 				Flip();
 		}
-		else if (Input.GetKey(KeyCode.A))
+		else if(Input.GetKey(KeyCode.A))
 		{
-			normalizedHorizontalSpeed = -1F;
-			if (isFacingRight)
+			_normalizedHorizontalSpeed = -1F;
+			if (_isFacingRight)
 				Flip();
 		}
 		else
 		{
-			normalizedHorizontalSpeed = 0F;
+			_normalizedHorizontalSpeed = 0F;
 		}
 
-		if(controller.CanJump && Input.GetKeyDown(KeyCode.Space))
+		if(_controller.CanJump && Input.GetKeyDown(KeyCode.Space))
 		{
-			controller.Jump();
+			_controller.Jump();
 		}
 	}
 
 	private void Flip()
 	{
 		transform.localScale = new Vector3(
-			-transform.localScale.x, 
-			transform.localScale.y, 
+			-transform.localScale.x,
+			transform.localScale.y,
 			transform.localScale.z);
 
-		isFacingRight = transform.localScale.x > 0F;
+		_isFacingRight = transform.localScale.x > 0F;
 	}
-	
 }

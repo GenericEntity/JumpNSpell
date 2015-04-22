@@ -14,8 +14,6 @@ D:\GitHub\JumpNSpell\Jump & Spell\Temp\UnityVS_bin\Debug\Assembly-CSharp.pdb
 D:\GitHub\JumpNSpell\Jump & Spell\Temp\UnityVS_bin\Debug\UnityEditor.dll
 D:\GitHub\JumpNSpell\Jump & Spell\Temp\UnityVS_bin\Debug\UnityEngine.dll
 D:\GitHub\JumpNSpell\Jump & Spell\Temp\UnityVS_bin\Debug\UnityEngine.UI.dll
-D:\GitHub\JumpNSpell\Jump & Spell\Temp\UnityVS_bin\Debug\UnityEngine.xml
-D:\GitHub\JumpNSpell\Jump & Spell\Temp\UnityVS_bin\Debug\UnityEditor.xml
 D:\GitHub\JumpNSpell\Jump & Spell\Temp\UnityVS_bin\Debug\UnityEngine.UI.xml
 D:\GitHub\JumpNSpell\Jump & Spell\obj\Debug\UnityVS.Jump _ Spell.CSharp.csprojResolveAssemblyReference.cache
 D:\GitHub\JumpNSpell\Jump & Spell\obj\Debug\Assembly-CSharp.dll

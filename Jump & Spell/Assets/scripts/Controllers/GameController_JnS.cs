@@ -28,7 +28,7 @@ public class GameController_JnS : MonoBehaviour
 	[SerializeField]
 	private GameObject levelExit;
 	private GameObject sceneCam;
-	private PlayerController player;
+	private Player player;
 	private UIManager_JnS uiManager;
 	private WordManager_JnS wordManager;
 
@@ -54,7 +54,7 @@ public class GameController_JnS : MonoBehaviour
 
 	void Awake()
 	{
-		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+		player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 		uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager_JnS>();
 		sceneCam = GameObject.FindGameObjectWithTag("MainCamera");
 		wordManager = GameObject.FindGameObjectWithTag("Player").GetComponent<WordManager_JnS>();

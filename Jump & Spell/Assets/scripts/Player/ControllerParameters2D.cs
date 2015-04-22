@@ -5,23 +5,23 @@ using System;
 [Serializable]
 public class ControllerParameters2D
 {
-	public enum JumpBehaviour
+	public enum JumpBehavior
 	{
 		CanJumpOnGround,
 		CanJumpAnywhere,
 		CantJump
 	}
 
-	public Vector2 maxVelocity = new Vector2(float.MaxValue, float.MaxValue);
-	
+	public Vector2 MaxVelocity = new Vector2(float.MaxValue, float.MaxValue);
+
 	[Range(0, 90)]
-	public float slopeLimit = 30F;
-	
-	public float gravity = -25F;
+	public float SlopeLimit = 30F;
 
-	public JumpBehaviour jumpRestrictions;
+	public float Gravity = -40F;
 
-	public float jumpFrequency = 0.25F;
+	public JumpBehavior JumpRestrictions;
 
-	public float jumpMagnitude = 12F;
+	public float JumpFrequency = 0.25F;
+
+	public float JumpMagnitude = 16F;
 }

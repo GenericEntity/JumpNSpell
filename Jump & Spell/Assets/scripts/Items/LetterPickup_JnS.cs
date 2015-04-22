@@ -14,7 +14,7 @@ public class LetterPickup_JnS : MonoBehaviour
 
 	public void OnTriggerEnter2D(Collider2D other)
 	{
-		var player = other.GetComponent<PlayerController>();
+		var player = other.GetComponent<Player>();
 		if (player == null)
 			return;
 
