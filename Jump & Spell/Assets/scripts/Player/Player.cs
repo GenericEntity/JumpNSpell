@@ -11,8 +11,11 @@ public class Player : MonoBehaviour
 	public float SpeedAccelerationOnGround = 10F;
 	public float SpeedAccelerationInAir = 5F;
 
+	public bool CanMove { get; set; }
+
 	public void Start()
 	{
+		CanMove = true;
 		_controller = GetComponent<CharacterController2D>();
 		_isFacingRight = transform.localScale.x > 0F;
 	}
@@ -26,33 +29,36 @@ public class Player : MonoBehaviour
 			_controller.Velocity.x, 
 			_normalizedHorizontalSpeed * MaxSpeed, 
 			Time.deltaTime * movementFactor));
-
-
 	}
 
 	private void HandleInput()
 	{
-		if(Input.GetKey(KeyCode.D))
+		if (CanMove)
 		{
-			_normalizedHorizontalSpeed = 1F;
-			if (!_isFacingRight)
-				Flip();
-		}
-		else if(Input.GetKey(KeyCode.A))
-		{
-			_normalizedHorizontalSpeed = -1F;
-			if (_isFacingRight)
-				Flip();
+			if (Input.GetButton("Right"))
+			{
+				_normalizedHorizontalSpeed = 1F;
+				if (!_isFacingRight)
+					Flip();
+			}
+			else if (Input.GetButton("Left"))
+			{
+				_normalizedHorizontalSpeed = -1F;
+				if (_isFacingRight)
+					Flip();
+			}
+			else
+			{
+				_normalizedHorizontalSpeed = 0F;
+			}
+
+			if (_controller.CanJump && Input.GetButtonDown("Jump"))
+			{
+				_controller.Jump();
+			}
 		}
 		else
-		{
 			_normalizedHorizontalSpeed = 0F;
-		}
-
-		if(_controller.CanJump && Input.GetKeyDown(KeyCode.Space))
-		{
-			_controller.Jump();
-		}
 	}
 
 	private void Flip()
@@ -63,5 +69,5 @@ public class Player : MonoBehaviour
 			transform.localScale.z);
 
 		_isFacingRight = transform.localScale.x > 0F;
-	}
+	}	
 }

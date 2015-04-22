@@ -66,6 +66,7 @@ public class GameController_JnS : MonoBehaviour
 	
 	void Start()
 	{
+		Time.timeScale = 1F;
 		scoreAtStart = GameData.dataHolder.score;
 		ForceEnableAllTimers(true);
 		ForceEnableAllControls(true);
@@ -110,7 +111,7 @@ public class GameController_JnS : MonoBehaviour
 	public void EnableMovementIfValid(bool enable)
 	{
 		if (State == GameState.Playing)
-			player.enabled = enable;
+			player.CanMove = enable;
 	}
 
 	public void ForceEnableAllTimers(bool enable)
@@ -136,7 +137,7 @@ public class GameController_JnS : MonoBehaviour
 	public void ForceEnableAllControls(bool enable)
 	{
 		// Movement
-		player.enabled = enable;
+		player.CanMove = enable;
 		// Cam Zoom
 		sceneCam.GetComponent<CameraZoom_JnS>().enabled = enable;
 		// Exit level
@@ -242,7 +243,7 @@ public class GameController_JnS : MonoBehaviour
 		{
 			Time.timeScale = 0F;
 			isPaused = true;
-			player.enabled = false;
+			player.CanMove = false;
 			sceneCam.GetComponent<CameraZoom_JnS>().enabled = false;
 			levelExit.GetComponent<LevelExit_JnS>().enabled = false;
 			uiManager.DisplayGameMenu = true;
@@ -256,7 +257,7 @@ public class GameController_JnS : MonoBehaviour
 		{
 			Time.timeScale = 1F;
 			isPaused = false;
-			player.enabled = true;
+			player.CanMove = true;
 			sceneCam.GetComponent<CameraZoom_JnS>().enabled = true;
 			levelExit.GetComponent<LevelExit_JnS>().enabled = true;
 			uiManager.DisplayGameMenu = false;
